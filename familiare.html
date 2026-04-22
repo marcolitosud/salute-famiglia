@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#F5FAFD">
+<title>Profilo · Salute Famiglia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:#FFFFFF; --bg:#F5FAFD; --surface-2:#E6F3FA;
+    --line:#CDE4F1; --line-soft:#E8F1F7;
+    --ink:#0F172A; --ink-2:#334155; --muted:#64748B;
+    --primary:#0C4A6E; --primary-2:#075985; --accent:#0284C7; --accent-2:#0EA5E9;
+    --soft:#E0F2FE; --soft-2:#BAE6FD;
+    --amber:#B45309; --amber-bg:#FEF3C7;
+    --rose:#B91C1C; --rose-bg:#FEE2E2;
+    --ok:#047857; --ok-bg:#D1FAE5;
+    --plum:#6D28D9; --plum-bg:#EDE9FE;
+    --ochre:#A16207; --ochre-bg:#FEF3C7;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: var(--bg); color: var(--ink); min-height: 100vh;
+    -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
+  }
+  body::before {
+    content:''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background-image: radial-gradient(rgba(12,74,110,0.03) 1px, transparent 1px);
+    background-size: 3px 3px;
+  }
+  .serif-num { font-family: 'Fraunces', serif; font-feature-settings:'ss01'; font-weight: 500; }
+
+  /* TOPBAR */
+  .topbar {
+    background: var(--paper); border-bottom: 1px solid var(--line);
+    padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .icon-btn {
+    width: 34px; height: 34px; border-radius: 10px; background: var(--line-soft);
+    border: none; display: flex; align-items: center; justify-content: center;
+    color: var(--ink-2); cursor: pointer; text-decoration: none; flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+  }
+  .icon-btn:hover { background: var(--soft); color: var(--primary); }
+  .topbar-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); flex: 1; text-align: center; }
+
+  main { flex: 1; padding: 20px 20px 110px; max-width: 720px; width: 100%; margin: 0 auto; }
+
+  /* PROFILE CHIP */
+  .profile-chip { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+  .profile-avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--soft-2), var(--accent));
+    color: white; display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-weight: 600; font-size: 19px;
+    flex-shrink: 0; box-shadow: 0 4px 14px -4px rgba(12,74,110,0.3);
+  }
+  .profile-avatar.minore { background: linear-gradient(135deg, #FDE68A, var(--amber)); }
+  .profile-details { flex: 1; min-width: 0; }
+  .profile-name { font-family: 'Fraunces', serif; font-size: 21px; font-weight: 600; color: var(--primary); line-height: 1.15; letter-spacing: -0.02em; }
+  .profile-meta-row { font-size: 12px; color: var(--muted); margin-top: 2px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+
+  .pill { display: inline-flex; align-items: center; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 999px; letter-spacing: 0.02em; gap: 4px; }
+  .pill-warn { background: var(--amber-bg); color: var(--amber); }
+  .pill-alert { background: var(--rose-bg); color: var(--rose); }
+  .pill-ok { background: var(--ok-bg); color: var(--ok); }
+  .pill-muted { background: var(--line-soft); color: var(--ink-2); }
+  .pill-sky { background: var(--soft); color: var(--primary); }
+
+  .divider { height: 1px; background: linear-gradient(to right, transparent, var(--line), transparent); margin: 14px 0; }
+
+  /* QUICK OVERVIEW STRIP */
+  .overview-strip {
+    display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 16px;
+    scrollbar-width: none;
+  }
+  .overview-strip::-webkit-scrollbar { display: none; }
+  .overview-tile {
+    flex-shrink: 0; padding: 10px 14px; border-radius: 14px;
+    cursor: pointer; transition: transform 0.12s, box-shadow 0.15s;
+    min-width: 130px;
+  }
+  .overview-tile:hover { transform: translateY(-1px); box-shadow: 0 4px 12px -4px rgba(12,74,110,0.15); }
+  .overview-tile.alert { background: var(--rose-bg); }
+  .overview-tile.warn { background: var(--amber-bg); }
+  .overview-tile.sky { background: var(--soft); }
+  .overview-tile.ok { background: var(--ok-bg); }
+  .overview-lbl { font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em; }
+  .overview-tile.alert .overview-lbl { color: var(--rose); }
+  .overview-tile.warn .overview-lbl { color: var(--amber); }
+  .overview-tile.sky .overview-lbl { color: var(--primary); }
+  .overview-tile.ok .overview-lbl { color: var(--ok); }
+  .overview-val { font-family: 'Fraunces', serif; font-feature-settings:'ss01'; font-size: 17px; font-weight: 500; line-height: 1; margin-top: 4px; }
+  .overview-tile.alert .overview-val { color: var(--rose); }
+  .overview-tile.warn .overview-val { color: var(--amber); }
+  .overview-tile.sky .overview-val { color: var(--primary); }
+  .overview-tile.ok .overview-val { color: var(--ok); }
+
+  /* SECTION H */
+  .section-h {
+    font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600; color: var(--ink);
+    margin: 4px 0 12px; letter-spacing: -0.01em;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .section-h-action {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 11px; font-weight: 600; color: var(--primary);
+    background: none; border: none; cursor: pointer; padding: 0;
+  }
+  .section-h-action:hover { color: var(--accent); }
+
+  /* CATEGORIES GRID */
+  .cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 22px; }
+  .cat-card {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 14px;
+    padding: 14px; cursor: pointer; transition: transform 0.12s, box-shadow 0.15s, border-color 0.15s;
+    text-decoration: none; color: inherit; display: flex; flex-direction: column;
+    min-height: 118px; position: relative;
+    box-shadow: 0 1px 2px rgba(12,74,110,0.04);
+  }
+  .cat-card:hover { border-color: var(--soft-2); box-shadow: 0 4px 14px -4px rgba(12,74,110,0.12); transform: translateY(-1px); }
+  .cat-card:active { transform: scale(0.98); }
+  .cat-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .cat-icon.col-rose { background: var(--rose-bg); color: var(--rose); }
+  .cat-icon.col-ok { background: var(--ok-bg); color: var(--ok); }
+  .cat-icon.col-primary { background: var(--soft); color: var(--primary); }
+  .cat-icon.col-amber { background: var(--amber-bg); color: var(--amber); }
+  .cat-icon.col-accent { background: var(--soft); color: var(--accent); }
+  .cat-icon.col-plum { background: var(--plum-bg); color: var(--plum); }
+  .cat-icon.col-ochre { background: var(--ochre-bg); color: var(--ochre); }
+  .cat-icon.col-muted { background: var(--line-soft); color: var(--ink-2); }
+  .cat-name { font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.2; margin-top: 10px; letter-spacing: -0.01em; }
+  .cat-sub { font-size: 10.5px; color: var(--muted); margin-top: 3px; line-height: 1.3; }
+  .cat-pills { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
+
+  .cat-card.empty { opacity: 0.55; }
+  .cat-card.empty .cat-name { color: var(--ink-2); }
+
+  /* FILTER CHIPS */
+  .chips-wrap {
+    display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 14px;
+    scrollbar-width: none;
+  }
+  .chips-wrap::-webkit-scrollbar { display: none; }
+  .chip {
+    flex-shrink: 0; padding: 7px 13px; border-radius: 999px;
+    font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;
+    background: var(--paper); color: var(--ink-2); border: 1px solid var(--line);
+    transition: all 0.12s;
+  }
+  .chip:hover { border-color: var(--soft-2); }
+  .chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+  /* TIMELINE */
+  .timeline-date-row { display: flex; align-items: center; gap: 10px; margin: 18px 0 10px; }
+  .timeline-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 0 4px rgba(2,132,199,0.14); background: var(--accent); }
+  .timeline-dot.today { box-shadow: 0 0 0 4px rgba(2,132,199,0.22); }
+  .timeline-dot.old { background: var(--muted); box-shadow: 0 0 0 3px rgba(100,116,139,0.15); }
+  .timeline-date { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600; color: var(--ink); }
+  .timeline-today-mark { font-size: 10.5px; color: var(--muted); }
+
+  .referto-link { text-decoration: none; color: inherit; display: block; margin-bottom: 10px; }
+  .referto-card {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 14px;
+    padding: 14px; display: flex; gap: 12px; align-items: flex-start;
+    box-shadow: 0 1px 2px rgba(12,74,110,0.04); transition: all 0.15s;
+    position: relative; overflow: hidden;
+  }
+  .referto-card.has-alert::after { content: ''; position: absolute; right: 0; top: 0; height: 100%; width: 3px; background: var(--rose); }
+  .referto-card.has-warn::after { content: ''; position: absolute; right: 0; top: 0; height: 100%; width: 3px; background: var(--amber); }
+  .referto-link:hover .referto-card { border-color: var(--soft-2); box-shadow: 0 4px 12px -4px rgba(12,74,110,0.12); transform: translateY(-1px); }
+  .referto-card.old { background: var(--line-soft); opacity: 0.88; }
+  .cat-icon-sm {
+    width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .referto-info { flex: 1; min-width: 0; }
+  .referto-title { font-size: 13.5px; font-weight: 600; color: var(--ink); line-height: 1.25; }
+  .referto-sub { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.35; }
+  .referto-pills { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .empty-state { text-align: center; color: var(--muted); font-size: 13px; padding: 32px 20px; background: var(--paper); border-radius: 14px; border: 1px dashed var(--line); }
+  .loading-wrap { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 40px; color: var(--muted); font-size: 13px; }
+  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--line); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* FAB */
+  .fab-wrap {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to top, var(--bg) 60%, transparent);
+    padding: 20px 20px 24px; z-index: 5;
+    display: flex; justify-content: center;
+  }
+  .fab {
+    background: var(--primary); color: white; border: none;
+    padding: 14px 26px; border-radius: 999px;
+    font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer;
+    display: flex; align-items: center; gap: 10px; min-height: 50px;
+    box-shadow: 0 10px 25px -8px rgba(12,74,110,0.5);
+    transition: all 0.15s;
+  }
+  .fab:hover { background: var(--primary-2); }
+  .fab:active { transform: scale(0.96); }
+
+  /* MODAL UPLOAD */
+  .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 100; align-items: flex-end; justify-content: center; }
+  .modal-backdrop.show { display: flex; }
+  .modal { background: var(--paper); width: 100%; max-width: 560px; border-radius: 22px 22px 0 0; padding: 22px 20px 24px; max-height: 92vh; overflow-y: auto; animation: slideUp 0.25s ease; }
+  @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-handle { width: 36px; height: 4px; background: var(--line); border-radius: 2px; margin: 0 auto 14px; }
+  .modal-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; color: var(--primary); margin: 0 0 4px; letter-spacing: -0.01em; }
+  .modal-sub { font-size: 13px; color: var(--muted); margin: 0 0 18px; line-height: 1.5; }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--ink-2); margin: 12px 0 6px; }
+  select, input[type=date], input[type=text] { width: 100%; padding: 11px 12px; border: 1.5px solid var(--line); border-radius: 10px; font-size: 15px; font-family: inherit; background: var(--paper); color: var(--ink); }
+  select:focus, input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(2,132,199,0.12); }
+
+  .file-picker { border: 2px dashed var(--soft-2); background: var(--soft); border-radius: 12px; padding: 22px 16px; text-align: center; cursor: pointer; }
+  .file-picker:hover { background: #CFEAFA; }
+  .file-picker input[type=file] { display: none; }
+  .file-picker .hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .files-list { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+  .file-item { background: var(--ok-bg); border: 1px solid #A7F3D0; border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; }
+  .file-item .file-num { width: 22px; height: 22px; border-radius: 50%; background: var(--ok); color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .file-item .file-info { flex: 1; min-width: 0; }
+  .file-item .file-name { font-size: 12.5px; font-weight: 600; color: var(--ok); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-item .file-size { font-size: 10.5px; color: var(--ink-2); margin-top: 2px; }
+  .file-remove { background: transparent; border: none; cursor: pointer; color: var(--muted); padding: 4px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .file-remove:hover { background: var(--rose-bg); color: var(--rose); }
+
+  .add-page-btn { width: 100%; background: var(--paper); color: var(--primary); border: 1.5px dashed var(--soft-2); border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .add-page-btn:hover { background: var(--soft); border-color: var(--accent); }
+
+  .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+  .btn { flex: 1; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; border: none; }
+  .btn-secondary { background: var(--paper); color: var(--ink-2); border: 1px solid var(--line); }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .extraction-preview { background: var(--soft); border: 1px solid var(--soft-2); border-radius: 10px; padding: 12px 14px; margin-top: 14px; font-size: 12.5px; color: var(--primary); line-height: 1.6; }
+  .extraction-preview .param-row { padding: 5px 0; border-bottom: 1px solid rgba(12,74,110,0.1); display: flex; justify-content: space-between; gap: 10px; }
+  .extraction-preview .param-row:last-child { border-bottom: none; }
+  .extraction-preview .param-name { font-weight: 500; color: var(--ink-2); }
+  .extraction-preview .param-val { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .extraction-preview .flag-ok { color: var(--ok); }
+  .extraction-preview .flag-warn { color: var(--amber); }
+  .extraction-preview .flag-alert { color: var(--rose); }
+
+  .err-msg { background: var(--rose-bg); color: var(--rose); padding: 10px 14px; border-radius: 8px; font-size: 12.5px; margin-top: 12px; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="icon-btn" aria-label="Indietro">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+  </a>
+  <div class="topbar-tag" id="topbar-tag">Famiglia</div>
+  <a href="account.html" class="icon-btn" aria-label="Account">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5 21a7 7 0 0 1 14 0"/></svg>
+  </a>
+</div>
+
+<main>
+  <div id="content">
+    <div class="loading-wrap"><span class="spinner"></span> Caricamento profilo...</div>
+  </div>
+</main>
+
+<div class="fab-wrap" id="fab-wrap" style="display:none;">
+  <button class="fab" id="btn-upload">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    Nuovo referto
+  </button>
+</div>
+
+<!-- MODAL UPLOAD -->
+<div class="modal-backdrop" id="upload-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3 class="modal-title">Nuovo referto</h3>
+    <p class="modal-sub">Carica una o più pagine (foto o PDF). L'AI estrae i dati da tutte le pagine come un unico documento.</p>
+
+    <label>Categoria</label>
+    <select id="m-categoria"></select>
+
+    <label>Sotto-tipo (opzionale, es. "Emocromo")</label>
+    <input type="text" id="m-sottotipo" placeholder="Lascia vuoto: l'AI lo compila">
+
+    <label>Data esame</label>
+    <input type="date" id="m-data">
+
+    <label>Pagine del referto</label>
+    <label class="file-picker" id="file-picker" style="display:none;">
+      <input type="file" id="m-file" accept="image/*,application/pdf" multiple>
+      <div>
+        <div style="font-weight:600;color:var(--ink-2);">Tocca per scegliere PDF o foto</div>
+        <div class="hint">Puoi selezionare più pagine insieme</div>
+      </div>
+    </label>
+
+    <div class="files-list" id="files-list"></div>
+    <button class="add-page-btn" id="add-page-btn" style="display:none;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      Aggiungi un'altra pagina
+    </button>
+
+    <div id="extraction-area"></div>
+    <div id="err-area"></div>
+
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="m-cancel">Annulla</button>
+      <button class="btn btn-primary" id="m-submit">Estrai e salva</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://qhdwmydcldfwlfddyqri.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_7gP7-jBlrN9yaxtgqOXVpQ_DRzNco8Y';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Mappe colore + icona per categoria
+const CAT_COLORS = {
+  'sangue-urine': 'col-rose',
+  'cardiologia': 'col-ok',
+  'imaging': 'col-ochre',
+  'mappa-nei': 'col-amber',
+  'visite': 'col-accent',
+  'screening': 'col-plum',
+  'odontoiatria': 'col-muted',
+  'vaccinazioni': 'col-ok',
+  'ricoveri': 'col-muted',
+  'terapie': 'col-amber',
+};
+const ICONS = {
+  'sangue-urine':   '<path d="M12 2s-5 6-5 11a5 5 0 0 0 10 0c0-5-5-11-5-11z" fill="currentColor"/>',
+  'cardiologia':    '<path d="M20.84 4.6a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.07a5.5 5.5 0 0 0-7.78 7.78l1.06 1.07L12 21.23l7.78-7.78 1.06-1.07a5.5 5.5 0 0 0 0-7.78Z"/>',
+  'imaging':        '<circle cx="12" cy="12" r="3"/><path d="M2 12a10 10 0 0 1 20 0"/><path d="M2 12a10 10 0 0 0 20 0"/>',
+  'mappa-nei':      '<circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="13" r="1" fill="currentColor"/>',
+  'visite':         '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/>',
+  'screening':      '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  'odontoiatria':   '<path d="M12 5.5c-1.5-2-4-2.5-6-1.5-2 1-3 3.5-2 6 .5 1.5 1 3 .5 5 .5 2 2 5 3 5s1.5-2 2-4 1-3 2.5-3 2 1 2.5 3 1 4 2 4 2.5-3 3-5c-.5-2 0-3.5.5-5 1-2.5 0-5-2-6-2-1-4.5-.5-6 1.5Z"/>',
+  'vaccinazioni':   '<path d="m18 2 4 4-10 10H8v-4L18 2Z"/><path d="m15 5 4 4"/>',
+  'ricoveri':       '<path d="M8 2h8l4 4v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Z"/><path d="M10 12h4M12 10v4"/>',
+  'terapie':        '<path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/>',
+};
+
+const MESI_IT = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+const MESI_BREVI = ['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
+const MAX_PAGINE = 10;
+
+let currentFamiliare = null;
+let currentCategorie = [];
+let currentReferti = [];
+let currentMisurazioni = [];
+let currentStats = { totReferti:0, totParametri:0, nAlert:0, nWarn:0 };
+let currentFilter = { cat: null, anno: null };
+let pickedFiles = [];
+
+init();
+
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { location.href = 'index.html'; return; }
+
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  if (!id) { document.getElementById('content').innerHTML = '<div class="empty-state">ID familiare mancante.</div>'; return; }
+
+  const { data: fam, error: errFam } = await supabase.from('familiari').select('*').eq('id', id).single();
+  if (errFam || !fam) { document.getElementById('content').innerHTML = '<div class="empty-state">Profilo non trovato o non accessibile.</div>'; return; }
+  currentFamiliare = fam;
+
+  document.getElementById('topbar-tag').textContent = `${fam.nome} · Profilo`;
+
+  const { data: cats } = await supabase.from('categorie').select('id, slug, nome, ordine').eq('is_sistema', true).order('ordine');
+  currentCategorie = cats || [];
+
+  await caricaDati();
+  renderProfile();
+  setupModal();
+}
+
+async function caricaDati() {
+  const { data: referti } = await supabase
+    .from('referti')
+    .select('id, sotto_tipo, data_esame, stato_estrazione, categoria_id, centro_medico, file_paths')
+    .eq('familiare_id', currentFamiliare.id)
+    .order('data_esame', { ascending: false });
+  const refs = referti || [];
+
+  let mis = [];
+  if (refs.length > 0) {
+    const ids = refs.map(r => r.id);
+    const { data } = await supabase
+      .from('misurazioni')
+      .select('referto_id, parametro_raw_name, flag, valore_numerico')
+      .in('referto_id', ids);
+    mis = data || [];
+  }
+
+  // Aggrega per referto
+  const byRef = {};
+  for (const m of mis) {
+    if (!byRef[m.referto_id]) byRef[m.referto_id] = { total:0, alert:0, warn:0, ok:0 };
+    byRef[m.referto_id].total++;
+    if (m.flag === 'fuori_range_alto' || m.flag === 'fuori_range_basso') byRef[m.referto_id].alert++;
+    else if (m.flag === 'borderline') byRef[m.referto_id].warn++;
+    else if (m.flag === 'ok') byRef[m.referto_id].ok++;
+  }
+
+  currentReferti = refs.map(r => ({
+    ...r,
+    n_params: byRef[r.id]?.total || 0,
+    n_alert: byRef[r.id]?.alert || 0,
+    n_warn: byRef[r.id]?.warn || 0,
+    n_ok: byRef[r.id]?.ok || 0,
+  }));
+  currentMisurazioni = mis;
+
+  const paramsUni = new Set();
+  mis.forEach(m => { if (m.valore_numerico !== null) paramsUni.add(normalizeParamName(m.parametro_raw_name)); });
+  currentStats = {
+    totReferti: refs.length,
+    totParametri: paramsUni.size,
+    nAlert: mis.filter(m => m.flag === 'fuori_range_alto' || m.flag === 'fuori_range_basso').length,
+    nWarn: mis.filter(m => m.flag === 'borderline').length,
+  };
+}
+
+// ---------- Render ----------
+function renderProfile() {
+  const f = currentFamiliare;
+  const initials = (f.nome[0] + (f.cognome[0] || '')).toUpperCase();
+  const eta = etaDaData(f.data_nascita);
+  const metaParts = [];
+  if (eta !== null) metaParts.push(`${eta} anni`);
+  if (f.ruolo_famiglia) metaParts.push(f.ruolo_famiglia);
+  metaParts.push(`${currentStats.totReferti} refert${currentStats.totReferti === 1 ? 'o' : 'i'}`);
+
+  // Profile chip
+  const chipHtml = `
+    <div class="profile-chip">
+      <div class="profile-avatar ${f.is_minore ? 'minore' : ''}">${initials}</div>
+      <div class="profile-details">
+        <div class="profile-name">${escapeHtml(f.nome)} ${escapeHtml(f.cognome)}</div>
+        <div class="profile-meta-row">
+          ${f.is_minore ? '<span class="pill pill-warn">Minore</span>' : ''}
+          <span>${metaParts.join(' · ')}</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Overview strip
+  const overviewTiles = [];
+  if (currentStats.nAlert > 0) overviewTiles.push(`<div class="overview-tile alert"><div class="overview-lbl">FUORI RANGE</div><div class="overview-val">${currentStats.nAlert} valor${currentStats.nAlert===1?'e':'i'}</div></div>`);
+  if (currentStats.nWarn > 0) overviewTiles.push(`<div class="overview-tile warn"><div class="overview-lbl">BORDERLINE</div><div class="overview-val">${currentStats.nWarn} valor${currentStats.nWarn===1?'e':'i'}</div></div>`);
+  overviewTiles.push(`<div class="overview-tile sky"><div class="overview-lbl">PARAMETRI</div><div class="overview-val">${currentStats.totParametri} tracciati</div></div>`);
+  if (currentStats.nAlert === 0 && currentStats.nWarn === 0 && currentStats.totReferti > 0) {
+    overviewTiles.unshift(`<div class="overview-tile ok"><div class="overview-lbl">STATO</div><div class="overview-val">tutto regolare</div></div>`);
+  }
+  const overviewHtml = overviewTiles.length > 0 ? `<div class="overview-strip">${overviewTiles.join('')}</div>` : '';
+
+  // Categorie colorate
+  const countByCat = {}, alertByCat = {}, warnByCat = {};
+  currentReferti.forEach(r => {
+    countByCat[r.categoria_id] = (countByCat[r.categoria_id] || 0) + 1;
+    alertByCat[r.categoria_id] = (alertByCat[r.categoria_id] || 0) + r.n_alert;
+    warnByCat[r.categoria_id] = (warnByCat[r.categoria_id] || 0) + r.n_warn;
+  });
+
+  // Parametri per categoria
+  const refByCat = {};
+  currentReferti.forEach(r => {
+    if (!refByCat[r.categoria_id]) refByCat[r.categoria_id] = [];
+    refByCat[r.categoria_id].push(r);
+  });
+
+  const catsHtml = currentCategorie.map(c => {
+    const n = countByCat[c.id] || 0;
+    const a = alertByCat[c.id] || 0;
+    const w = warnByCat[c.id] || 0;
+    const paramSetCat = new Set();
+    (refByCat[c.id] || []).forEach(r => {
+      currentMisurazioni.filter(m => m.referto_id === r.id && m.valore_numerico !== null)
+        .forEach(m => paramSetCat.add(normalizeParamName(m.parametro_raw_name)));
+    });
+    const nParams = paramSetCat.size;
+
+    const pillsHtml = [];
+    if (a > 0) pillsHtml.push(`<span class="pill pill-alert">● ${a}</span>`);
+    if (w > 0) pillsHtml.push(`<span class="pill pill-warn">⚠ ${w}</span>`);
+    if (a === 0 && w === 0 && n > 0) pillsHtml.push(`<span class="pill pill-ok">✓ regolare</span>`);
+    if (n === 0) pillsHtml.push(`<span class="pill pill-muted">vuoto</span>`);
+
+    const subParts = [];
+    if (n > 0) subParts.push(`${n} refert${n === 1 ? 'o' : 'i'}`);
+    if (nParams > 0) subParts.push(`${nParams} param.`);
+
+    return `
+      <a href="categoria.html?familiare=${f.id}&cat=${c.slug}" class="cat-card ${n === 0 ? 'empty' : ''}">
+        <div class="cat-icon ${CAT_COLORS[c.slug] || 'col-muted'}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[c.slug] || '<circle cx="12" cy="12" r="9"/>'}</svg>
+        </div>
+        <div class="cat-name">${escapeHtml(c.nome)}</div>
+        <div class="cat-sub">${subParts.join(' · ') || 'nessun dato'}</div>
+        <div class="cat-pills">${pillsHtml.join('')}</div>
+      </a>
+    `;
+  }).join('');
+
+  // Filtri cronologia
+  const catsConReferti = currentCategorie.filter(c => currentReferti.some(r => r.categoria_id === c.id));
+  const anni = [...new Set(currentReferti.map(r => new Date(r.data_esame).getFullYear()))].sort((a,b) => b - a);
+  const filtersHtml = `
+    <div class="chips-wrap">
+      <div class="chip ${!currentFilter.cat && !currentFilter.anno ? 'active' : ''}" data-filter="all">Tutti</div>
+      ${catsConReferti.map(c => `<div class="chip ${currentFilter.cat === c.slug ? 'active' : ''}" data-cat="${c.slug}">${escapeHtml(c.nome)}</div>`).join('')}
+      ${anni.map(y => `<div class="chip ${currentFilter.anno === y ? 'active' : ''}" data-anno="${y}">${y}</div>`).join('')}
+    </div>
+  `;
+
+  // Timeline referti
+  const refertiFiltrati = filtraReferti(currentReferti);
+  const refertiPerData = raggruppaPerData(refertiFiltrati);
+  const timelineHtml = refertiFiltrati.length === 0
+    ? '<div class="empty-state">Nessun referto per questo filtro.</div>'
+    : Object.keys(refertiPerData).map(dk => {
+        const items = refertiPerData[dk];
+        const d = new Date(dk);
+        const oggi = sameDay(d, new Date());
+        const old = (new Date() - d) > (365 * 24 * 3600 * 1000);
+        const dataLabel = `${d.getDate()} ${MESI_IT[d.getMonth()]} ${d.getFullYear()}`;
+        return `
+          <div class="timeline-date-row">
+            <div class="timeline-dot ${oggi ? 'today' : old ? 'old' : ''}"></div>
+            <div class="timeline-date">${dataLabel}</div>
+            ${oggi ? '<div class="timeline-today-mark">· oggi</div>' : ''}
+          </div>
+          ${items.map(r => renderRefertoCard(r, old)).join('')}
+        `;
+      }).join('');
+
+  document.getElementById('content').innerHTML = `
+    ${chipHtml}
+    ${overviewHtml}
+    <div class="divider"></div>
+
+    <div class="section-h">Insiemi</div>
+    <div class="cat-grid">${catsHtml}</div>
+
+    <div class="section-h">Cronologia</div>
+    ${filtersHtml}
+    ${timelineHtml}
+  `;
+
+  document.getElementById('fab-wrap').style.display = 'flex';
+  document.getElementById('btn-upload').addEventListener('click', openModal);
+
+  document.querySelectorAll('.chip').forEach(c => {
+    c.addEventListener('click', () => {
+      if (c.dataset.filter === 'all') currentFilter = { cat: null, anno: null };
+      else if (c.dataset.cat) currentFilter = { cat: c.dataset.cat, anno: null };
+      else if (c.dataset.anno) currentFilter = { cat: null, anno: parseInt(c.dataset.anno, 10) };
+      renderProfile();
+    });
+  });
+}
+
+function filtraReferti(refs) {
+  let out = refs;
+  if (currentFilter.cat) {
+    const cat = currentCategorie.find(c => c.slug === currentFilter.cat);
+    if (cat) out = out.filter(r => r.categoria_id === cat.id);
+  }
+  if (currentFilter.anno) out = out.filter(r => new Date(r.data_esame).getFullYear() === currentFilter.anno);
+  return out;
+}
+function raggruppaPerData(refs) {
+  const out = {};
+  for (const r of refs) { if (!out[r.data_esame]) out[r.data_esame] = []; out[r.data_esame].push(r); }
+  return out;
+}
+
+function renderRefertoCard(r, isOld) {
+  const cat = currentCategorie.find(c => c.id === r.categoria_id);
+  const slug = cat?.slug || 'visite';
+  let pills = [];
+  if (r.n_alert > 0) pills.push(`<span class="pill pill-alert">● ${r.n_alert} fuori range</span>`);
+  else if (r.n_warn > 0) pills.push(`<span class="pill pill-warn">⚠ ${r.n_warn} borderline</span>`);
+  else if (r.n_ok > 0) pills.push(`<span class="pill pill-ok">✓ Nella norma</span>`);
+  if (r.n_params > 0) pills.push(`<span class="pill pill-muted">${r.n_params} parametri</span>`);
+  const nPag = r.file_paths?.length || 0;
+  if (nPag > 1) pills.push(`<span class="pill pill-muted">${nPag} pagine</span>`);
+
+  const cardClass = r.n_alert > 0 ? 'has-alert' : r.n_warn > 0 ? 'has-warn' : '';
+  return `
+    <a href="referto.html?id=${r.id}" class="referto-link">
+      <div class="referto-card ${cardClass} ${isOld ? 'old' : ''}">
+        <div class="cat-icon-sm ${CAT_COLORS[slug] || 'col-muted'}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[slug] || '<circle cx="12" cy="12" r="9"/>'}</svg>
+        </div>
+        <div class="referto-info">
+          <div class="referto-title">${escapeHtml(r.sotto_tipo || 'Referto')}</div>
+          <div class="referto-sub">${escapeHtml(r.centro_medico || cat?.nome || '—')}</div>
+          ${pills.length > 0 ? `<div class="referto-pills">${pills.join('')}</div>` : ''}
+        </div>
+      </div>
+    </a>
+  `;
+}
+
+function etaDaData(iso) { if (!iso) return null; const o=new Date(),n=new Date(iso); let e=o.getFullYear()-n.getFullYear(); const m=o.getMonth()-n.getMonth(); if (m<0||(m===0&&o.getDate()<n.getDate())) e--; return e; }
+function sameDay(a, b) { return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
+function normalizeParamName(s) { return String(s || '').toLowerCase().trim().replace(/\s+/g, ' '); }
+function escapeHtml(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// ---------- UPLOAD MODAL (invariato) ----------
+function setupModal() {
+  const catSelect = document.getElementById('m-categoria');
+  catSelect.innerHTML = currentCategorie.map(c => `<option value="${c.id}" data-slug="${c.slug}">${escapeHtml(c.nome)}</option>`).join('');
+  document.getElementById('m-data').value = new Date().toISOString().slice(0, 10);
+  document.getElementById('m-cancel').addEventListener('click', closeModal);
+  document.getElementById('m-file').addEventListener('change', (e) => {
+    const nuovi = Array.from(e.target.files || []);
+    for (const f of nuovi) { if (pickedFiles.length >= MAX_PAGINE) break; pickedFiles.push(f); }
+    e.target.value = '';
+    renderFilesList();
+  });
+  document.getElementById('add-page-btn').addEventListener('click', () => document.getElementById('m-file').click());
+  document.getElementById('m-submit').addEventListener('click', handleSubmit);
+}
+
+function renderFilesList() {
+  const listEl = document.getElementById('files-list');
+  const pickerEl = document.getElementById('file-picker');
+  const addBtnEl = document.getElementById('add-page-btn');
+  if (pickedFiles.length === 0) { listEl.innerHTML=''; pickerEl.style.display='block'; addBtnEl.style.display='none'; return; }
+  pickerEl.style.display = 'none';
+  listEl.innerHTML = pickedFiles.map((f, i) => `
+    <div class="file-item">
+      <div class="file-num">${i + 1}</div>
+      <div class="file-info">
+        <div class="file-name">${escapeHtml(f.name)}</div>
+        <div class="file-size">${(f.size / 1024).toFixed(0)} KB</div>
+      </div>
+      <button type="button" class="file-remove" data-idx="${i}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  `).join('');
+  listEl.querySelectorAll('.file-remove').forEach(btn => {
+    btn.addEventListener('click', () => { pickedFiles.splice(parseInt(btn.dataset.idx, 10), 1); renderFilesList(); });
+  });
+  if (pickedFiles.length >= MAX_PAGINE) { addBtnEl.disabled = true; addBtnEl.innerHTML = `Massimo ${MAX_PAGINE} pagine raggiunto`; }
+  else { addBtnEl.disabled = false; addBtnEl.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Aggiungi un'altra pagina (${pickedFiles.length}/${MAX_PAGINE})`; }
+  addBtnEl.style.display = 'flex';
+}
+
+function openModal() { document.getElementById('upload-modal').classList.add('show'); resetModal(); }
+function closeModal() { document.getElementById('upload-modal').classList.remove('show'); }
+function resetModal() {
+  pickedFiles = [];
+  document.getElementById('m-file').value = '';
+  document.getElementById('m-sottotipo').value = '';
+  document.getElementById('extraction-area').innerHTML = '';
+  document.getElementById('err-area').innerHTML = '';
+  document.getElementById('m-data').value = new Date().toISOString().slice(0, 10);
+  const submitBtn = document.getElementById('m-submit');
+  submitBtn.disabled = false;
+  submitBtn.textContent = 'Estrai e salva';
+  renderFilesList();
+}
+
+async function handleSubmit() {
+  const errArea = document.getElementById('err-area');
+  errArea.innerHTML = '';
+  if (pickedFiles.length === 0) { errArea.innerHTML = '<div class="err-msg">Seleziona almeno una pagina prima di procedere.</div>'; return; }
+  const submitBtn = document.getElementById('m-submit');
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="spinner" style="border-top-color:white;"></span> Estrazione in corso...';
+  try {
+    const filesPayload = [];
+    for (const f of pickedFiles) {
+      const b64 = await fileToBase64(f);
+      filesPayload.push({ file_base64: b64, mime_type: f.type });
+    }
+    document.getElementById('extraction-area').innerHTML = `<div class="extraction-preview"><b>L'AI sta leggendo ${pickedFiles.length > 1 ? `le ${pickedFiles.length} pagine` : 'il referto'}...</b></div>`;
+    const { data: result, error: fnError } = await supabase.functions.invoke('estrai-referto', { body: { files: filesPayload } });
+    if (fnError) throw new Error('Edge Function: ' + (fnError.message || fnError));
+    if (!result || !result.ok) throw new Error(result?.error || result?.details || 'Estrazione fallita');
+    renderExtractionPreview(result.data, result.usage);
+    await salvaReferto(result.data);
+    submitBtn.innerHTML = '✓ Salvato';
+    setTimeout(() => { closeModal(); caricaDati().then(renderProfile); }, 1200);
+  } catch (err) {
+    console.error(err);
+    errArea.innerHTML = `<div class="err-msg">Errore: ${escapeHtml(err.message || String(err))}</div>`;
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Estrai e salva';
+  }
+}
+
+function fileToBase64(file) { return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result.split(',')[1]); r.onerror = rej; r.readAsDataURL(file); }); }
+
+function renderExtractionPreview(data, usage) {
+  const paramsHtml = (data.parametri || []).map(p => {
+    const val = p.valore_numerico !== null && p.valore_numerico !== undefined ? `${p.valore_numerico}${p.unita ? ' ' + p.unita : ''}` : (p.valore_testuale || '—');
+    const fc = p.flag === 'ok' ? 'flag-ok' : p.flag === 'borderline' ? 'flag-warn' : (p.flag === 'fuori_range_alto' || p.flag === 'fuori_range_basso') ? 'flag-alert' : '';
+    return `<div class="param-row"><span class="param-name">${escapeHtml(p.nome)}</span><span class="param-val ${fc}">${escapeHtml(val)}</span></div>`;
+  }).join('');
+  document.getElementById('extraction-area').innerHTML = `
+    <div class="extraction-preview">
+      <div style="margin-bottom:8px;"><b>${escapeHtml(data.sotto_tipo || 'Referto')}</b> · ${escapeHtml(data.data_esame || '')}</div>
+      <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px;">${escapeHtml(data.centro_medico || '')}${data.medico ? ' · ' + escapeHtml(data.medico) : ''}</div>
+      ${paramsHtml || '<div style="color:var(--muted);font-style:italic;">Nessun parametro numerico.</div>'}
+      ${data.conclusioni ? `<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(12,74,110,0.15);"><b>Conclusioni:</b> ${escapeHtml(data.conclusioni)}</div>` : ''}
+      ${usage ? `<div style="margin-top:8px;font-size:10.5px;color:var(--muted);">Token: ${usage.input_tokens} in + ${usage.output_tokens} out</div>` : ''}
+    </div>
+  `;
+}
+
+async function salvaReferto(aiData) {
+  const slug = aiData.categoria_suggerita || document.getElementById('m-categoria').selectedOptions[0].dataset.slug;
+  const cat = currentCategorie.find(c => c.slug === slug) || currentCategorie.find(c => c.id === document.getElementById('m-categoria').value);
+  const sottotipoManuale = document.getElementById('m-sottotipo').value.trim();
+  const dataManuale = document.getElementById('m-data').value;
+  const { data: refertoRow, error: errIns } = await supabase
+    .from('referti')
+    .insert({
+      familiare_id: currentFamiliare.id, categoria_id: cat.id,
+      sotto_tipo: sottotipoManuale || aiData.sotto_tipo,
+      data_esame: aiData.data_esame || dataManuale,
+      centro_medico: aiData.centro_medico, medico: aiData.medico,
+      file_paths: [], file_mime: pickedFiles[0]?.type,
+      file_size: pickedFiles.reduce((s, f) => s + f.size, 0),
+      ai_metadata: aiData, conclusioni: aiData.conclusioni,
+      stato_estrazione: 'done',
+    }).select().single();
+  if (errIns) throw new Error('Salvataggio referto fallito: ' + errIns.message);
+
+  const uploadedPaths = [];
+  for (let i = 0; i < pickedFiles.length; i++) {
+    const f = pickedFiles[i];
+    const ext = (f.name.split('.').pop() || 'bin').toLowerCase();
+    const path = `${currentFamiliare.id}/${refertoRow.id}/${String(i + 1).padStart(3, '0')}.${ext}`;
+    const { error: upErr } = await supabase.storage.from('referti').upload(path, f, { contentType: f.type, upsert: false });
+    if (upErr) { await supabase.from('referti').delete().eq('id', refertoRow.id); throw new Error(`Upload pagina ${i + 1} fallito: ${upErr.message}`); }
+    uploadedPaths.push(path);
+  }
+  const { error: updErr } = await supabase.from('referti').update({ file_paths: uploadedPaths }).eq('id', refertoRow.id);
+  if (updErr) throw new Error('Aggiornamento file_paths fallito: ' + updErr.message);
+
+  const misurazioni = (aiData.parametri || []).map((p, i) => ({
+    referto_id: refertoRow.id, parametro_raw_name: p.nome,
+    valore_numerico: p.valore_numerico, valore_testuale: p.valore_testuale,
+    unita: p.unita, range_min: p.range_min, range_max: p.range_max,
+    flag: p.flag || 'indeterminato', ordine: i,
+  }));
+  if (misurazioni.length > 0) {
+    const { error: errMis } = await supabase.from('misurazioni').insert(misurazioni);
+    if (errMis) console.warn('Errore salvataggio misurazioni:', errMis.message);
+  }
+}
+</script>
+</body>
+</html>

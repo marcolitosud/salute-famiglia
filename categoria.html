@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#F5FAFD">
+<title>Categoria · Salute Famiglia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:#FFFFFF; --bg:#F5FAFD; --surface-2:#E6F3FA;
+    --line:#CDE4F1; --line-soft:#E8F1F7;
+    --ink:#0F172A; --ink-2:#334155; --muted:#64748B;
+    --primary:#0C4A6E; --primary-2:#075985; --accent:#0284C7; --accent-2:#0EA5E9;
+    --soft:#E0F2FE; --soft-2:#BAE6FD;
+    --amber:#B45309; --amber-bg:#FEF3C7;
+    --rose:#B91C1C; --rose-bg:#FEE2E2;
+    --ok:#047857; --ok-bg:#D1FAE5;
+    --plum:#6D28D9; --plum-bg:#EDE9FE;
+    --ochre:#A16207; --ochre-bg:#FEF3C7;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; font-family:'Plus Jakarta Sans', system-ui, sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; pointer-events:none; background-image:radial-gradient(rgba(12,74,110,0.03) 1px, transparent 1px); background-size:3px 3px; }
+  .serif-num { font-family:'Fraunces', serif; font-feature-settings:'ss01'; font-weight:500; }
+
+  .topbar { background:var(--paper); border-bottom:1px solid var(--line); padding:12px 16px; display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:10; }
+  .icon-btn { width:34px; height:34px; border-radius:10px; background:var(--line-soft); border:none; display:flex; align-items:center; justify-content:center; color:var(--ink-2); cursor:pointer; text-decoration:none; flex-shrink:0; }
+  .icon-btn:hover { background:var(--soft); color:var(--primary); }
+  .topbar-tag { font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); flex:1; text-align:center; }
+
+  main { flex:1; padding:20px 20px 110px; max-width:720px; width:100%; margin:0 auto; }
+
+  /* HERO */
+  .hero-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .hero-icon-box { width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .hero-icon-box.col-rose { background:var(--rose-bg); color:var(--rose); }
+  .hero-icon-box.col-ok { background:var(--ok-bg); color:var(--ok); }
+  .hero-icon-box.col-primary { background:var(--soft); color:var(--primary); }
+  .hero-icon-box.col-amber { background:var(--amber-bg); color:var(--amber); }
+  .hero-icon-box.col-accent { background:var(--soft); color:var(--accent); }
+  .hero-icon-box.col-plum { background:var(--plum-bg); color:var(--plum); }
+  .hero-icon-box.col-ochre { background:var(--ochre-bg); color:var(--ochre); }
+  .hero-icon-box.col-muted { background:var(--line-soft); color:var(--ink-2); }
+  .hero-kicker { font-size:10.5px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; }
+  .hero-kicker.col-rose { color:var(--rose); }
+  .hero-kicker.col-ok { color:var(--ok); }
+  .hero-kicker.col-primary { color:var(--primary); }
+  .hero-kicker.col-amber { color:var(--amber); }
+  .hero-kicker.col-accent { color:var(--accent); }
+  .hero-kicker.col-plum { color:var(--plum); }
+  .hero-kicker.col-ochre { color:var(--ochre); }
+  .hero-kicker.col-muted { color:var(--ink-2); }
+  .hero-title { font-family:'Fraunces', serif; font-size:28px; font-weight:600; color:var(--primary); line-height:1.1; letter-spacing:-0.02em; margin:0; }
+  .hero-title .it { font-style: italic; }
+  .hero-meta { font-size:12px; color:var(--muted); margin-top:8px; line-height:1.5; }
+
+  /* TAB SELECTOR */
+  .tabsel { display:flex; background:var(--line-soft); border-radius:999px; padding:4px; gap:4px; margin:18px 0 18px; }
+  .tabsel-btn {
+    flex:1; padding:8px 10px; border-radius:999px; font-size:12px; font-weight:600;
+    background:transparent; border:none; color:var(--ink-2); cursor:pointer; font-family:inherit;
+    transition: all 0.15s;
+  }
+  .tabsel-btn.active { background:var(--paper); color:var(--ink); box-shadow:0 1px 3px rgba(12,74,110,0.1); }
+
+  .section-h { font-family:'Fraunces', serif; font-size:15px; font-weight:600; color:var(--ink); margin:0 0 12px; letter-spacing:-0.01em; display:flex; align-items:center; justify-content:space-between; }
+
+  /* PARAMETRO CARD */
+  .param-card {
+    background:var(--paper); border:1px solid var(--line); border-radius:14px;
+    padding:14px; margin-bottom:10px; position:relative; overflow:hidden;
+    box-shadow: 0 1px 2px rgba(12,74,110,0.04);
+    cursor: pointer; text-decoration:none; color:inherit; display:block;
+    transition: all 0.15s;
+  }
+  .param-card:hover { border-color:var(--soft-2); box-shadow:0 4px 12px -4px rgba(12,74,110,0.12); transform:translateY(-1px); }
+  .param-card::before {
+    content:''; position:absolute; left:0; top:0; height:100%; width:3px;
+    background: var(--ok);
+  }
+  .param-card.warn::before { background: var(--amber); }
+  .param-card.alert::before { background: var(--rose); }
+  .param-card.muted::before { background: var(--muted); }
+
+  .param-row { display:flex; align-items:center; gap:12px; padding-left:6px; }
+  .param-main { flex:1; min-width:0; }
+  .param-name { font-size:13px; font-weight:600; color:var(--ink); line-height:1.25; }
+  .param-range { font-size:10.5px; color:var(--muted); margin-top:3px; }
+  .param-spark { width:64px; height:26px; flex-shrink:0; }
+  .param-value-box { text-align:right; flex-shrink:0; }
+  .param-value-num { font-family:'Fraunces', serif; font-feature-settings:'ss01'; font-size:19px; font-weight:500; line-height:1; color:var(--ok); }
+  .param-card.warn .param-value-num { color:var(--amber); }
+  .param-card.alert .param-value-num { color:var(--rose); }
+  .param-card.muted .param-value-num { color:var(--ink-2); }
+  .param-value-unit { font-size:9.5px; color:var(--muted); margin-top:3px; }
+  .param-bottom-row { display:flex; align-items:center; gap:8px; margin-top:8px; padding-left:6px; flex-wrap: wrap; }
+
+  .pill { display:inline-flex; align-items:center; font-size:10.5px; font-weight:600; padding:3px 8px; border-radius:999px; letter-spacing:0.02em; gap:4px; }
+  .pill-warn { background:var(--amber-bg); color:var(--amber); }
+  .pill-alert { background:var(--rose-bg); color:var(--rose); }
+  .pill-ok { background:var(--ok-bg); color:var(--ok); }
+  .pill-muted { background:var(--line-soft); color:var(--ink-2); }
+
+  .param-trend-note { font-size:10.5px; color:var(--muted); }
+
+  /* TIMELINE REFERTI */
+  .timeline-date-row { display:flex; align-items:center; gap:10px; margin:14px 0 10px; }
+  .timeline-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; background:var(--accent); box-shadow:0 0 0 4px rgba(2,132,199,0.14); }
+  .timeline-dot.old { background:var(--muted); box-shadow:0 0 0 3px rgba(100,116,139,0.15); }
+  .timeline-date { font-family:'Fraunces', serif; font-size:15px; font-weight:600; color:var(--ink); }
+
+  .referto-link { text-decoration:none; color:inherit; display:block; margin-bottom:10px; }
+  .referto-card { background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:14px; display:flex; gap:12px; box-shadow:0 1px 2px rgba(12,74,110,0.04); position:relative; overflow:hidden; transition: all 0.15s; }
+  .referto-link:hover .referto-card { border-color:var(--soft-2); box-shadow:0 4px 12px -4px rgba(12,74,110,0.12); transform:translateY(-1px); }
+  .referto-card.has-alert::after { content:''; position:absolute; right:0; top:0; height:100%; width:3px; background:var(--rose); }
+  .referto-card.has-warn::after { content:''; position:absolute; right:0; top:0; height:100%; width:3px; background:var(--amber); }
+  .cat-icon-sm { width:36px; height:36px; border-radius:10px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+  .referto-info { flex:1; min-width:0; }
+  .referto-title { font-size:13.5px; font-weight:600; color:var(--ink); line-height:1.25; }
+  .referto-sub { font-size:11px; color:var(--muted); margin-top:2px; }
+  .referto-pills { margin-top:8px; display:flex; gap:6px; flex-wrap:wrap; }
+
+  /* MAPPA NEI PLACEHOLDER */
+  .nei-hero {
+    background: var(--paper); border:1px solid var(--line); border-radius:14px;
+    padding: 22px; display:flex; gap:18px; align-items:center;
+    box-shadow: 0 1px 2px rgba(12,74,110,0.04);
+  }
+  .nei-silhouette-wrap { flex-shrink:0; width:130px; background:var(--surface-2); border-radius:14px; padding:12px 8px 8px; }
+  .nei-silhouette-head { display:flex; justify-content:space-between; align-items:center; font-size:9px; font-weight:700; color:var(--primary); letter-spacing:0.05em; margin-bottom:4px; }
+  .nei-silhouette svg { width:100%; height:auto; }
+  .nei-stats { flex:1; min-width:0; display:flex; flex-direction:column; gap:8px; }
+  .nei-stat { padding:9px 12px; border-radius:10px; display:flex; align-items:center; justify-content:space-between; }
+  .nei-stat.ok { background: var(--ok-bg); color: var(--ok); }
+  .nei-stat.warn { background: var(--amber-bg); color: var(--amber); }
+  .nei-stat.alert { background: var(--rose-bg); color: var(--rose); }
+  .nei-stat-lbl { font-size:9.5px; font-weight:700; letter-spacing:0.06em; }
+  .nei-stat-val { font-family:'Fraunces', serif; font-feature-settings:'ss01'; font-size:16px; font-weight:500; }
+  .nei-soon {
+    background: var(--soft); border:1px dashed var(--soft-2); border-radius:12px;
+    padding:18px; margin-top:16px; text-align:center; color:var(--primary); font-size:12.5px;
+  }
+  .nei-soon b { display:block; font-family:'Fraunces', serif; font-size:15px; margin-bottom:4px; letter-spacing:-0.01em; }
+
+  .empty-state { text-align:center; color:var(--muted); font-size:13px; padding:32px 20px; background:var(--paper); border-radius:14px; border:1px dashed var(--line); }
+  .loading-wrap { display:flex; align-items:center; justify-content:center; gap:10px; padding:40px; color:var(--muted); font-size:13px; }
+  .spinner { display:inline-block; width:16px; height:16px; border:2px solid var(--line); border-top-color:var(--primary); border-radius:50%; animation:spin 0.7s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* BOTTOM ACTIONS */
+  .bottom-actions {
+    position: fixed; left:0; right:0; bottom:0; z-index:5;
+    background: rgba(245,250,253,0.96); backdrop-filter: blur(8px);
+    border-top:1px solid var(--line);
+    padding: 12px 16px; display:flex; gap:10px;
+    max-width:720px; margin:0 auto;
+  }
+  .action-btn { flex:1; padding:12px; border-radius:12px; font-size:13px; font-weight:600; font-family:inherit; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; min-height:44px; }
+  .action-btn.ghost { background:var(--paper); color:var(--ink); border:1px solid var(--line); }
+  .action-btn.ghost:hover { background:var(--line-soft); }
+  .action-btn.primary { background:var(--primary); color:white; border:none; }
+  .action-btn.primary:hover { background:var(--primary-2); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="#" class="icon-btn" id="back-btn" aria-label="Indietro">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+  </a>
+  <div class="topbar-tag">Categoria</div>
+  <div style="width:34px;"></div>
+</div>
+
+<main>
+  <div id="content">
+    <div class="loading-wrap"><span class="spinner"></span> Caricamento...</div>
+  </div>
+</main>
+
+<div class="bottom-actions" id="bottom-actions" style="display:none;">
+  <button class="action-btn ghost" id="btn-new-referto">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    Nuovo referto
+  </button>
+  <button class="action-btn primary" id="btn-export">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+    Esporta CSV
+  </button>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://qhdwmydcldfwlfddyqri.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_7gP7-jBlrN9yaxtgqOXVpQ_DRzNco8Y';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const CAT_COLORS = {
+  'sangue-urine':'col-rose','cardiologia':'col-ok','imaging':'col-ochre','mappa-nei':'col-amber',
+  'visite':'col-accent','screening':'col-plum','odontoiatria':'col-muted',
+  'vaccinazioni':'col-ok','ricoveri':'col-muted','terapie':'col-amber',
+};
+const ICONS = {
+  'sangue-urine':'<path d="M12 2s-5 6-5 11a5 5 0 0 0 10 0c0-5-5-11-5-11z" fill="currentColor"/>',
+  'cardiologia':'<path d="M20.84 4.6a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.07a5.5 5.5 0 0 0-7.78 7.78l1.06 1.07L12 21.23l7.78-7.78 1.06-1.07a5.5 5.5 0 0 0 0-7.78Z"/>',
+  'imaging':'<circle cx="12" cy="12" r="3"/><path d="M2 12a10 10 0 0 1 20 0"/><path d="M2 12a10 10 0 0 0 20 0"/>',
+  'mappa-nei':'<circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="13" r="1" fill="currentColor"/>',
+  'visite':'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/>',
+  'screening':'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  'odontoiatria':'<path d="M12 5.5c-1.5-2-4-2.5-6-1.5-2 1-3 3.5-2 6 .5 1.5 1 3 .5 5 .5 2 2 5 3 5s1.5-2 2-4 1-3 2.5-3 2 1 2.5 3 1 4 2 4 2.5-3 3-5c-.5-2 0-3.5.5-5 1-2.5 0-5-2-6-2-1-4.5-.5-6 1.5Z"/>',
+  'vaccinazioni':'<path d="m18 2 4 4-10 10H8v-4L18 2Z"/><path d="m15 5 4 4"/>',
+  'ricoveri':'<path d="M8 2h8l4 4v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Z"/><path d="M10 12h4M12 10v4"/>',
+  'terapie':'<path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/>',
+};
+const MESI_IT = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+
+let familiareId = null;
+let currentCategoria = null;
+let currentFamiliare = null;
+let refertiCat = [];
+let misurazioniCat = [];
+let allRefertiFam = [];
+let currentTab = 'parametri';
+
+init();
+
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { location.href = 'index.html'; return; }
+
+  const params = new URLSearchParams(location.search);
+  familiareId = params.get('familiare');
+  const catSlug = params.get('cat');
+  if (!familiareId || !catSlug) {
+    document.getElementById('content').innerHTML = '<div class="empty-state">Parametri mancanti.</div>';
+    return;
+  }
+
+  document.getElementById('back-btn').addEventListener('click', (e) => { e.preventDefault(); location.href = `familiare.html?id=${familiareId}`; });
+
+  // Fetch familiare
+  const { data: fam } = await supabase.from('familiari').select('*').eq('id', familiareId).single();
+  if (!fam) { document.getElementById('content').innerHTML = '<div class="empty-state">Familiare non accessibile.</div>'; return; }
+  currentFamiliare = fam;
+
+  // Fetch categoria
+  const { data: cat } = await supabase.from('categorie').select('*').eq('slug', catSlug).single();
+  if (!cat) { document.getElementById('content').innerHTML = '<div class="empty-state">Categoria non trovata.</div>'; return; }
+  currentCategoria = cat;
+
+  // Fetch referti di questa categoria per questo familiare
+  const { data: referti } = await supabase
+    .from('referti')
+    .select('id, sotto_tipo, data_esame, centro_medico, categoria_id, file_paths')
+    .eq('familiare_id', familiareId)
+    .eq('categoria_id', cat.id)
+    .order('data_esame', { ascending: false });
+  refertiCat = referti || [];
+
+  // Misurazioni di questi referti
+  if (refertiCat.length > 0) {
+    const ids = refertiCat.map(r => r.id);
+    const { data: mis } = await supabase
+      .from('misurazioni').select('*')
+      .in('referto_id', ids);
+    misurazioniCat = mis || [];
+  }
+
+  // Tutti i referti del familiare (per popolare data_esame anche per trend cross-categoria se serve)
+  const { data: allRefs } = await supabase.from('referti').select('id, data_esame').eq('familiare_id', familiareId);
+  allRefertiFam = allRefs || [];
+
+  // Setup bottom actions
+  document.getElementById('btn-new-referto').addEventListener('click', () => {
+    location.href = `familiare.html?id=${familiareId}`;
+  });
+  document.getElementById('btn-export').addEventListener('click', exportCSV);
+
+  render();
+}
+
+function render() {
+  const cat = currentCategoria;
+  const color = CAT_COLORS[cat.slug] || 'col-muted';
+  const ultimi = refertiCat.length > 0 ? formatDataLunga(refertiCat[0].data_esame) : null;
+
+  // Titolo categoria: per "Mappa nei" faccio due righe con italic
+  const titoloHtml = cat.slug === 'mappa-nei'
+    ? `Mappa<br><span class="it">dei nei</span>`
+    : escapeHtml(cat.nome);
+
+  // Stats per hero
+  const nRefs = refertiCat.length;
+  const paramSet = new Set();
+  misurazioniCat.forEach(m => { if (m.valore_numerico !== null) paramSet.add(normalizeParamName(m.parametro_raw_name)); });
+  const nParams = paramSet.size;
+
+  const heroHtml = `
+    <div class="hero-row">
+      <div class="hero-icon-box ${color}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[cat.slug] || '<circle cx="12" cy="12" r="9"/>'}</svg>
+      </div>
+      <div class="hero-kicker ${color}">${escapeHtml(cat.nome)}</div>
+    </div>
+    <h1 class="hero-title">${titoloHtml}</h1>
+    <div class="hero-meta">
+      ${nRefs} refert${nRefs === 1 ? 'o archiviato' : 'i archiviati'}${nParams > 0 ? ` · ${nParams} parametri tracciati` : ''}
+      ${ultimi ? `<br>ultimo: ${ultimi}` : ''}
+    </div>
+  `;
+
+  // Casi speciali per categorie senza parametri numerici (mappa-nei, vaccinazioni, ricoveri)
+  if (cat.slug === 'mappa-nei') {
+    document.getElementById('content').innerHTML = `
+      ${heroHtml}
+      ${renderMappaNei()}
+    `;
+    document.getElementById('bottom-actions').style.display = 'flex';
+    return;
+  }
+
+  // Tab selector
+  const tabsHtml = `
+    <div class="tabsel">
+      <button class="tabsel-btn ${currentTab === 'parametri' ? 'active' : ''}" data-tab="parametri">Parametri</button>
+      <button class="tabsel-btn ${currentTab === 'referti' ? 'active' : ''}" data-tab="referti">Referti</button>
+    </div>
+  `;
+
+  // Body in base a tab
+  const bodyHtml = currentTab === 'parametri' ? renderParametri() : renderReferti();
+
+  document.getElementById('content').innerHTML = `
+    ${heroHtml}
+    ${tabsHtml}
+    ${bodyHtml}
+  `;
+
+  document.querySelectorAll('.tabsel-btn').forEach(btn => {
+    btn.addEventListener('click', () => { currentTab = btn.dataset.tab; render(); });
+  });
+
+  // Attach referto link handlers if needed (already anchor tags)
+
+  document.getElementById('bottom-actions').style.display = 'flex';
+}
+
+// ---- PARAMETRI TAB ----
+function renderParametri() {
+  // Raggruppa misurazioni per nome parametro normalizzato, prendendo la più recente per ognuno
+  const refDataMap = {};
+  refertiCat.forEach(r => { refDataMap[r.id] = r.data_esame; });
+
+  const byParam = {};
+  for (const m of misurazioniCat) {
+    if (m.valore_numerico === null) continue;
+    const key = normalizeParamName(m.parametro_raw_name);
+    if (!byParam[key]) byParam[key] = [];
+    byParam[key].push({ ...m, _data: refDataMap[m.referto_id] });
+  }
+
+  // Ordino ogni serie per data crescente
+  Object.keys(byParam).forEach(k => {
+    byParam[k].sort((a, b) => new Date(a._data) - new Date(b._data));
+  });
+
+  if (Object.keys(byParam).length === 0) {
+    return '<div class="empty-state">Nessun parametro numerico in questa categoria.<br>Carica un referto dalla dashboard per iniziare.</div>';
+  }
+
+  // Ordino parametri: prima alert, poi warn, poi per ultimo valore più recente
+  const paramList = Object.keys(byParam).map(k => {
+    const serie = byParam[k];
+    const ultima = serie[serie.length - 1];
+    let flagRank = ultima.flag === 'fuori_range_alto' || ultima.flag === 'fuori_range_basso' ? 0
+                 : ultima.flag === 'borderline' ? 1
+                 : ultima.flag === 'ok' ? 2 : 3;
+    return { key: k, serie, ultima, flagRank };
+  });
+  paramList.sort((a, b) => a.flagRank - b.flagRank || new Date(b.ultima._data) - new Date(a.ultima._data));
+
+  const cardsHtml = paramList.map(p => renderParamCard(p.ultima, p.serie)).join('');
+
+  return `
+    <div class="section-h">Parametri monitorati</div>
+    ${cardsHtml}
+  `;
+}
+
+function renderParamCard(ultima, serie) {
+  const flag = ultima.flag;
+  const flagCls = (flag === 'fuori_range_alto' || flag === 'fuori_range_basso') ? 'alert'
+                 : flag === 'borderline' ? 'warn'
+                 : flag === 'ok' ? '' : 'muted';
+
+  let rangeStr = '';
+  if (ultima.range_min !== null && ultima.range_max !== null) rangeStr = `VN ${ultima.range_min}–${ultima.range_max}`;
+  else if (ultima.range_max !== null) rangeStr = `VN < ${ultima.range_max}`;
+  else if (ultima.range_min !== null) rangeStr = `VN > ${ultima.range_min}`;
+  if (ultima.unita && rangeStr) rangeStr += ` ${ultima.unita}`;
+
+  const dataUltima = formatDataBreve(ultima._data);
+  const sparklineHtml = serie.length >= 2 ? renderSparkline(serie) : '';
+
+  // Pill stato
+  let statusPill = '';
+  if (flag === 'fuori_range_alto') statusPill = '<span class="pill pill-alert">● alto</span>';
+  else if (flag === 'fuori_range_basso') statusPill = '<span class="pill pill-alert">● basso</span>';
+  else if (flag === 'borderline') statusPill = '<span class="pill pill-warn">⚠ borderline</span>';
+  else if (flag === 'ok') statusPill = '<span class="pill pill-ok">✓ normale</span>';
+
+  // Trend note
+  let trendNote = '';
+  if (serie.length >= 2) {
+    const primo = serie[0].valore_numerico;
+    const ult = ultima.valore_numerico;
+    const diffPct = primo !== 0 ? ((ult - primo) / Math.abs(primo)) * 100 : 0;
+    if (Math.abs(diffPct) < 3) trendNote = 'trend stabile';
+    else if (diffPct > 0) trendNote = `+${diffPct.toFixed(0)}% vs primo`;
+    else trendNote = `${diffPct.toFixed(0)}% vs primo`;
+  }
+
+  return `
+    <a href="trend.html?familiare=${familiareId}&param=${encodeURIComponent(ultima.parametro_raw_name)}" class="param-card ${flagCls}">
+      <div class="param-row">
+        <div class="param-main">
+          <div class="param-name">${escapeHtml(ultima.parametro_raw_name)}</div>
+          <div class="param-range">${rangeStr ? rangeStr + ' · ' : ''}ultimo ${dataUltima}</div>
+        </div>
+        ${sparklineHtml ? `<div class="param-spark">${sparklineHtml}</div>` : ''}
+        <div class="param-value-box">
+          <div class="param-value-num">${escapeHtml(ultima.valore_numerico)}</div>
+          ${ultima.unita ? `<div class="param-value-unit">${escapeHtml(ultima.unita)}</div>` : ''}
+        </div>
+      </div>
+      ${(statusPill || trendNote) ? `<div class="param-bottom-row">${statusPill}${trendNote ? `<span class="param-trend-note">${trendNote}</span>` : ''}</div>` : ''}
+    </a>
+  `;
+}
+
+function renderSparkline(serie) {
+  const W = 64, H = 26, PAD = 2;
+  const vals = serie.map(s => s.valore_numerico);
+  const min = Math.min(...vals);
+  const max = Math.max(...vals);
+  const range = (max - min) || 1;
+  const points = serie.map((s, i) => {
+    const x = PAD + (i / (serie.length - 1)) * (W - 2 * PAD);
+    const y = H - PAD - ((s.valore_numerico - min) / range) * (H - 2 * PAD);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  const [lastX, lastY] = points[points.length - 1].split(',').map(Number);
+  const last = serie[serie.length - 1];
+  const color = (last.flag === 'fuori_range_alto' || last.flag === 'fuori_range_basso') ? '#B91C1C'
+              : last.flag === 'borderline' ? '#B45309'
+              : last.flag === 'ok' ? '#047857' : '#64748B';
+  return `
+    <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+      <polyline points="${points.join(' ')}" fill="none" stroke="${color}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+      <circle cx="${lastX}" cy="${lastY}" r="2.5" fill="${color}"/>
+    </svg>
+  `;
+}
+
+// ---- REFERTI TAB ----
+function renderReferti() {
+  if (refertiCat.length === 0) return '<div class="empty-state">Nessun referto in questa categoria.</div>';
+
+  // Raggruppa per data
+  const byData = {};
+  refertiCat.forEach(r => { if (!byData[r.data_esame]) byData[r.data_esame] = []; byData[r.data_esame].push(r); });
+  // Conteggi per pills
+  const byRef = {};
+  for (const m of misurazioniCat) {
+    if (!byRef[m.referto_id]) byRef[m.referto_id] = { total:0, alert:0, warn:0, ok:0 };
+    byRef[m.referto_id].total++;
+    if (m.flag === 'fuori_range_alto' || m.flag === 'fuori_range_basso') byRef[m.referto_id].alert++;
+    else if (m.flag === 'borderline') byRef[m.referto_id].warn++;
+    else if (m.flag === 'ok') byRef[m.referto_id].ok++;
+  }
+
+  return Object.keys(byData).map(dk => {
+    const items = byData[dk];
+    const d = new Date(dk);
+    const old = (new Date() - d) > (365 * 24 * 3600 * 1000);
+    const dataLabel = `${d.getDate()} ${MESI_IT[d.getMonth()]} ${d.getFullYear()}`;
+    return `
+      <div class="timeline-date-row">
+        <div class="timeline-dot ${old ? 'old' : ''}"></div>
+        <div class="timeline-date">${dataLabel}</div>
+      </div>
+      ${items.map(r => {
+        const b = byRef[r.id] || { total:0, alert:0, warn:0, ok:0 };
+        let pills = [];
+        if (b.alert > 0) pills.push(`<span class="pill pill-alert">● ${b.alert} fuori range</span>`);
+        else if (b.warn > 0) pills.push(`<span class="pill pill-warn">⚠ ${b.warn} borderline</span>`);
+        else if (b.ok > 0) pills.push(`<span class="pill pill-ok">✓ Nella norma</span>`);
+        if (b.total > 0) pills.push(`<span class="pill pill-muted">${b.total} parametri</span>`);
+        const nPag = r.file_paths?.length || 0;
+        if (nPag > 1) pills.push(`<span class="pill pill-muted">${nPag} pagine</span>`);
+        const cardClass = b.alert > 0 ? 'has-alert' : b.warn > 0 ? 'has-warn' : '';
+        return `
+          <a href="referto.html?id=${r.id}" class="referto-link">
+            <div class="referto-card ${cardClass}">
+              <div class="cat-icon-sm ${CAT_COLORS[currentCategoria.slug] || 'col-muted'}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[currentCategoria.slug] || '<circle cx="12" cy="12" r="9"/>'}</svg>
+              </div>
+              <div class="referto-info">
+                <div class="referto-title">${escapeHtml(r.sotto_tipo || 'Referto')}</div>
+                <div class="referto-sub">${escapeHtml(r.centro_medico || '—')}</div>
+                ${pills.length > 0 ? `<div class="referto-pills">${pills.join('')}</div>` : ''}
+              </div>
+            </div>
+          </a>
+        `;
+      }).join('')}
+    `;
+  }).join('');
+}
+
+// ---- MAPPA NEI (placeholder con silhouette) ----
+function renderMappaNei() {
+  return `
+    <div class="nei-hero">
+      <div class="nei-silhouette-wrap">
+        <div class="nei-silhouette-head"><span>FRONTE</span></div>
+        <div class="nei-silhouette">
+          <svg viewBox="0 0 120 240" xmlns="http://www.w3.org/2000/svg">
+            <g fill="none" stroke="#64748B" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round">
+              <ellipse cx="60" cy="22" rx="14" ry="17"/>
+              <path d="M53 37 L53 46 Q60 50 67 46 L67 37"/>
+              <path d="M40 48 Q30 52 28 70 L30 120 Q33 130 35 150 L42 165 Q50 170 60 170 Q70 170 78 165 L85 150 Q87 130 90 120 L92 70 Q90 52 80 48 Q72 46 60 46 Q48 46 40 48 Z"/>
+              <path d="M28 70 Q20 80 18 105 Q17 125 20 145 L26 160"/>
+              <path d="M92 70 Q100 80 102 105 Q103 125 100 145 L94 160"/>
+              <path d="M45 170 Q42 195 42 215 L45 235"/>
+              <path d="M56 170 Q56 195 54 215 L52 235"/>
+              <path d="M64 170 Q64 195 66 215 L68 235"/>
+              <path d="M75 170 Q78 195 78 215 L75 235"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="nei-stats">
+        <div class="nei-stat ok">
+          <span class="nei-stat-lbl">STABILI</span>
+          <span class="nei-stat-val">—</span>
+        </div>
+        <div class="nei-stat warn">
+          <span class="nei-stat-lbl">IN OSSERV.</span>
+          <span class="nei-stat-val">—</span>
+        </div>
+        <div class="nei-stat alert">
+          <span class="nei-stat-lbl">DA VISITA</span>
+          <span class="nei-stat-val">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nei-soon">
+      <b>Mappatura nei in arrivo</b>
+      Questa sezione permetterà di fotografare e tracciare i nei del corpo, con confronto temporale e analisi ABCDE automatica.
+      Per ora puoi comunque caricare un referto dermatologico tramite il pulsante qui sotto.
+    </div>
+  `;
+}
+
+// ---- EXPORT CSV ----
+function exportCSV() {
+  const rows = [['Data', 'Referto', 'Centro', 'Parametro', 'Valore', 'Unità', 'VN min', 'VN max', 'Flag']];
+  const refDataMap = {};
+  refertiCat.forEach(r => { refDataMap[r.id] = r; });
+  for (const m of misurazioniCat) {
+    const r = refDataMap[m.referto_id];
+    if (!r) continue;
+    rows.push([
+      r.data_esame, r.sotto_tipo || '', r.centro_medico || '',
+      m.parametro_raw_name, m.valore_numerico ?? m.valore_testuale ?? '',
+      m.unita || '', m.range_min ?? '', m.range_max ?? '', m.flag || '',
+    ]);
+  }
+  const csv = rows.map(row => row.map(c => {
+    const s = String(c ?? '');
+    return /[",\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  }).join(';')).join('\n');
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${currentFamiliare.nome}_${currentCategoria.slug}_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function formatDataLunga(iso) {
+  const d = new Date(iso);
+  return `${d.getDate()} ${MESI_IT[d.getMonth()]} ${d.getFullYear()}`;
+}
+function formatDataBreve(iso) {
+  const d = new Date(iso);
+  const mesi = ['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
+  return `${d.getDate()} ${mesi[d.getMonth()]} ${String(d.getFullYear()).slice(2)}`;
+}
+function normalizeParamName(s) { return String(s || '').toLowerCase().trim().replace(/\s+/g, ' '); }
+function escapeHtml(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+</script>
+</body>
+</html>
