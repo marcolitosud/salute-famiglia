@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#F5FAFD">
+<title>Andamento · Salute Famiglia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:#FFFFFF; --bg:#F5FAFD; --surface-2:#E6F3FA;
+    --line:#CDE4F1; --line-soft:#E8F1F7;
+    --ink:#0F172A; --ink-2:#334155; --muted:#64748B;
+    --primary:#0C4A6E; --primary-2:#075985; --accent:#0284C7; --accent-2:#0EA5E9;
+    --soft:#E0F2FE; --soft-2:#BAE6FD;
+    --amber:#B45309; --amber-bg:#FEF3C7;
+    --rose:#B91C1C; --rose-bg:#FEE2E2;
+    --ok:#047857; --ok-bg:#D1FAE5;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; font-family:'Plus Jakarta Sans', system-ui, sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; pointer-events:none; background-image:radial-gradient(rgba(12,74,110,0.03) 1px, transparent 1px); background-size:3px 3px; }
+
+  .topbar { background:var(--paper); border-bottom:1px solid var(--line); padding:12px 16px; display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:10; }
+  .icon-btn { width:34px; height:34px; border-radius:10px; background:var(--line-soft); border:none; display:flex; align-items:center; justify-content:center; color:var(--ink-2); cursor:pointer; text-decoration:none; flex-shrink:0; }
+  .icon-btn:hover { background:var(--soft); color:var(--primary); }
+  .topbar-tag { font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); flex:1; text-align:center; }
+
+  main { flex:1; padding:20px 20px 60px; max-width:720px; width:100%; margin:0 auto; }
+
+  .hero-kicker { font-size:10.5px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+  .hero-kicker.alert { color:var(--rose); }
+  .hero-kicker.warn { color:var(--amber); }
+  .hero-kicker::before { content:''; width:7px; height:7px; border-radius:50%; background:currentColor; }
+  .hero-title { font-family:'Fraunces', serif; font-size:28px; font-weight:600; color:var(--primary); line-height:1.1; letter-spacing:-0.02em; margin:0 0 10px; }
+  .hero-meta { font-size:12.5px; color:var(--muted); line-height:1.5; }
+
+  /* CURRENT VALUE CARD */
+  .current-card {
+    background: linear-gradient(135deg, var(--soft), var(--soft-2));
+    border-radius: 16px; padding: 18px 20px; margin-top: 18px;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
+  }
+  .current-card.alert { background: linear-gradient(135deg, var(--rose-bg), #FECACA); }
+  .current-card.warn { background: linear-gradient(135deg, var(--amber-bg), #FDE68A); }
+  .current-label { font-size:10.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--primary); }
+  .current-card.alert .current-label { color:var(--rose); }
+  .current-card.warn .current-label { color:var(--amber); }
+  .current-num-wrap { display:flex; align-items:baseline; gap:4px; margin-top:4px; }
+  .current-num { font-family:'Fraunces', serif; font-feature-settings:'ss01'; font-size:44px; font-weight:600; line-height:1; color:var(--primary); }
+  .current-card.alert .current-num { color:var(--rose); }
+  .current-card.warn .current-num { color:var(--amber); }
+  .current-unit { font-size:14px; font-weight:500; color:var(--primary); }
+  .current-card.alert .current-unit { color:var(--rose); }
+  .current-card.warn .current-unit { color:var(--amber); }
+  .current-delta { font-size:11px; color:var(--ink-2); margin-top:6px; }
+  .current-right { text-align:right; flex-shrink:0; }
+  .pill { display:inline-flex; align-items:center; font-size:10.5px; font-weight:600; padding:3px 9px; border-radius:999px; letter-spacing:0.02em; gap:4px; }
+  .pill-ok { background: rgba(255,255,255,0.6); color:var(--ok); }
+  .pill-alert { background: rgba(255,255,255,0.6); color:var(--rose); }
+  .pill-warn { background: rgba(255,255,255,0.6); color:var(--amber); }
+
+  /* CHART */
+  .chart-section { margin-top: 24px; }
+  .chart-h { font-family:'Fraunces', serif; font-size:16px; font-weight:600; color:var(--ink); margin:0 0 12px; letter-spacing:-0.01em; }
+  .chart-card { background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:18px 14px 16px; box-shadow:0 1px 2px rgba(12,74,110,0.04); position:relative; }
+  .chart-wrap { position:relative; height:200px; margin-left:30px; }
+  .y-labels { position:absolute; left:-30px; top:0; bottom:18px; display:flex; flex-direction:column; justify-content:space-between; font-size:9.5px; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .x-labels { display:flex; justify-content:space-between; margin-top:6px; font-size:9.5px; color:var(--muted); padding:0 2px; }
+  .x-label.current { color:var(--primary); font-weight:700; }
+
+  /* REFERTI CORRELATI */
+  .section-h { font-family:'Fraunces', serif; font-size:17px; font-weight:600; color:var(--ink); margin: 26px 0 12px; letter-spacing:-0.01em; }
+  .related-card { display:flex; align-items:center; gap:12px; background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin-bottom:8px; text-decoration:none; color:inherit; transition:border-color 0.15s, box-shadow 0.15s; }
+  .related-card:hover { border-color:var(--soft-2); box-shadow:0 3px 10px -3px rgba(12,74,110,0.1); }
+  .related-bar { width:3px; height:38px; border-radius:2px; flex-shrink:0; background:var(--muted); }
+  .related-bar.ok { background:var(--ok); }
+  .related-bar.warn { background:var(--amber); }
+  .related-bar.alert { background:var(--rose); }
+  .related-info { flex:1; min-width:0; }
+  .related-name { font-size:13px; font-weight:600; color:var(--ink); line-height:1.25; }
+  .related-meta { font-size:11px; color:var(--muted); margin-top:2px; }
+  .related-val { text-align:right; flex-shrink:0; }
+  .related-val-num { font-family:'Fraunces', serif; font-feature-settings:'ss01'; font-size:16px; font-weight:500; color:var(--ink); }
+  .related-val-num.ok { color:var(--ok); }
+  .related-val-num.warn { color:var(--amber); }
+  .related-val-num.alert { color:var(--rose); }
+
+  .empty { text-align:center; color:var(--muted); font-size:13px; padding:32px 20px; background:var(--paper); border-radius:14px; border:1px dashed var(--line); }
+  .loading-wrap { display:flex; align-items:center; justify-content:center; gap:10px; padding:40px; color:var(--muted); font-size:13px; }
+  .spinner { display:inline-block; width:16px; height:16px; border:2px solid var(--line); border-top-color:var(--primary); border-radius:50%; animation:spin 0.7s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="#" class="icon-btn" id="back-btn" aria-label="Indietro">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+  </a>
+  <div class="topbar-tag">Andamento</div>
+  <div style="width:34px;"></div>
+</div>
+
+<main>
+  <div id="content">
+    <div class="loading-wrap"><span class="spinner"></span> Caricamento andamento...</div>
+  </div>
+</main>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://qhdwmydcldfwlfddyqri.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_7gP7-jBlrN9yaxtgqOXVpQ_DRzNco8Y';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const MESI_IT_SHORT = ['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
+
+init();
+
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { location.href = 'index.html'; return; }
+
+  const params = new URLSearchParams(location.search);
+  const familiareId = params.get('familiare');
+  const paramName = params.get('param');
+  if (!familiareId || !paramName) {
+    document.getElementById('content').innerHTML = '<div class="empty">Parametri mancanti.</div>';
+    return;
+  }
+
+  document.getElementById('back-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    history.back();
+  });
+
+  // Prendi tutti i referti del familiare
+  const { data: referti } = await supabase
+    .from('referti')
+    .select('id, sotto_tipo, data_esame, centro_medico, categoria:categorie(nome)')
+    .eq('familiare_id', familiareId);
+  const refertiById = {};
+  (referti || []).forEach(r => { refertiById[r.id] = r; });
+  const refertiIds = (referti || []).map(r => r.id);
+
+  if (refertiIds.length === 0) {
+    document.getElementById('content').innerHTML = '<div class="empty">Nessun referto disponibile.</div>';
+    return;
+  }
+
+  // Tutte le misurazioni con questo nome parametro (normalizzato)
+  const { data: mis } = await supabase
+    .from('misurazioni')
+    .select('*')
+    .in('referto_id', refertiIds)
+    .not('valore_numerico', 'is', null);
+
+  const targetNorm = normalizeParamName(paramName);
+  const misMatch = (mis || []).filter(m => normalizeParamName(m.parametro_raw_name) === targetNorm);
+
+  if (misMatch.length === 0) {
+    document.getElementById('content').innerHTML = `<div class="empty">Nessun dato storico per "${escapeHtml(paramName)}".</div>`;
+    return;
+  }
+
+  // Ordina per data crescente
+  misMatch.forEach(m => { m._data = refertiById[m.referto_id]?.data_esame; });
+  misMatch.sort((a, b) => new Date(a._data) - new Date(b._data));
+
+  render(paramName, misMatch, refertiById);
+}
+
+function render(paramName, serie, refertiById) {
+  const ultima = serie[serie.length - 1];
+  const precedente = serie.length > 1 ? serie[serie.length - 2] : null;
+  const delta = precedente ? (ultima.valore_numerico - precedente.valore_numerico) : 0;
+  const deltaPrimo = (ultima.valore_numerico - serie[0].valore_numerico);
+
+  // Flag stato
+  const flagLast = ultima.flag;
+  const stato = (flagLast === 'fuori_range_alto' || flagLast === 'fuori_range_basso') ? 'alert'
+              : flagLast === 'borderline' ? 'warn' : 'ok';
+  const statoLabel = stato === 'alert' ? 'Fuori range' : stato === 'warn' ? 'Borderline' : 'Nella norma';
+
+  // Hero
+  const unit = ultima.unita || '';
+  let rangeStr = '';
+  if (ultima.range_min !== null && ultima.range_max !== null) rangeStr = `VN ${ultima.range_min}–${ultima.range_max}`;
+  else if (ultima.range_max !== null) rangeStr = `VN < ${ultima.range_max}`;
+  else if (ultima.range_min !== null) rangeStr = `VN > ${ultima.range_min}`;
+
+  const heroHtml = `
+    <div class="hero-kicker ${stato === 'alert' ? 'alert' : stato === 'warn' ? 'warn' : ''}">${statoLabel}</div>
+    <h1 class="hero-title">${escapeHtml(paramName)}</h1>
+    <div class="hero-meta">
+      ${rangeStr ? `${rangeStr}${unit ? ' ' + escapeHtml(unit) : ''}` : '—'}
+      · ${serie.length} misurazion${serie.length === 1 ? 'e' : 'i'}
+    </div>
+  `;
+
+  // Current card
+  const deltaStr = precedente
+    ? `${delta > 0 ? '+' : ''}${delta.toFixed(2).replace(/\.?0+$/, '')} dal precedente`
+    : serie.length === 1 ? 'Prima misurazione' : '';
+  const pillContent = stato === 'alert' && ultima.range_max !== null
+    ? `↑ ${Math.round((ultima.valore_numerico / ultima.range_max - 1) * 100)}% sopra VN`
+    : statoLabel;
+
+  const currentHtml = `
+    <div class="current-card ${stato}">
+      <div>
+        <div class="current-label">Valore attuale</div>
+        <div class="current-num-wrap">
+          <span class="current-num">${escapeHtml(ultima.valore_numerico)}</span>
+          <span class="current-unit">${escapeHtml(unit)}</span>
+        </div>
+        ${deltaStr ? `<div class="current-delta">${deltaStr}</div>` : ''}
+      </div>
+      <div class="current-right">
+        <span class="pill pill-${stato === 'alert' ? 'alert' : stato === 'warn' ? 'warn' : 'ok'}">${pillContent}</span>
+      </div>
+    </div>
+  `;
+
+  // Chart
+  const chartHtml = renderChart(serie);
+
+  // Related
+  const relatedHtml = serie.slice().reverse().map(m => {
+    const r = refertiById[m.referto_id];
+    if (!r) return '';
+    const flag = (m.flag === 'fuori_range_alto' || m.flag === 'fuori_range_basso') ? 'alert'
+               : m.flag === 'borderline' ? 'warn' : 'ok';
+    const d = new Date(r.data_esame);
+    const dataShort = `${d.getDate()} ${MESI_IT_SHORT[d.getMonth()]} ${d.getFullYear()}`;
+    return `
+      <a href="referto.html?id=${r.id}" class="related-card">
+        <div class="related-bar ${flag}"></div>
+        <div class="related-info">
+          <div class="related-name">${escapeHtml(r.sotto_tipo || r.categoria?.nome || 'Referto')}</div>
+          <div class="related-meta">${dataShort}${r.centro_medico ? ' · ' + escapeHtml(r.centro_medico) : ''}</div>
+        </div>
+        <div class="related-val">
+          <div class="related-val-num ${flag}">${escapeHtml(m.valore_numerico)} <span style="font-size:11px;opacity:0.7;font-weight:400;">${escapeHtml(m.unita || '')}</span></div>
+        </div>
+      </a>
+    `;
+  }).join('');
+
+  document.getElementById('content').innerHTML = `
+    ${heroHtml}
+    ${currentHtml}
+
+    <div class="chart-section">
+      <div class="chart-h">Andamento nel tempo</div>
+      ${chartHtml}
+    </div>
+
+    <div class="section-h">Referti correlati</div>
+    ${relatedHtml}
+  `;
+}
+
+function renderChart(serie) {
+  if (serie.length < 2) {
+    return `<div class="empty">Serve almeno una seconda misurazione per vedere un andamento.</div>`;
+  }
+  const W = 600, H = 200, PAD_L = 8, PAD_R = 8, PAD_T = 12, PAD_B = 12;
+
+  const vals = serie.map(s => s.valore_numerico);
+  let min = Math.min(...vals);
+  let max = Math.max(...vals);
+  // Include i range di riferimento se presenti
+  const last = serie[serie.length - 1];
+  if (last.range_min !== null) min = Math.min(min, last.range_min);
+  if (last.range_max !== null) max = Math.max(max, last.range_max);
+  const pad = (max - min) * 0.15 || 1;
+  min -= pad; max += pad;
+  const range = max - min;
+
+  const dates = serie.map(s => new Date(s._data).getTime());
+  const minDate = dates[0], maxDate = dates[dates.length - 1];
+  const dateRange = (maxDate - minDate) || 1;
+
+  const px = (i) => PAD_L + ((dates[i] - minDate) / dateRange) * (W - PAD_L - PAD_R);
+  const py = (val) => H - PAD_B - ((val - min) / range) * (H - PAD_T - PAD_B);
+
+  // Linee di range (se presenti)
+  let rangeLines = '';
+  if (last.range_max !== null) {
+    const y = py(last.range_max);
+    rangeLines += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="#047857" stroke-width="1.2" stroke-dasharray="5 4"/>
+      <text x="${W - 4}" y="${y - 4}" text-anchor="end" font-size="9" fill="#047857" font-weight="600">VN max ${last.range_max}</text>`;
+  }
+  if (last.range_min !== null) {
+    const y = py(last.range_min);
+    rangeLines += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="#047857" stroke-width="1.2" stroke-dasharray="5 4"/>
+      <text x="${W - 4}" y="${y - 4}" text-anchor="end" font-size="9" fill="#047857" font-weight="600">VN min ${last.range_min}</text>`;
+  }
+
+  // Path
+  const points = serie.map((s, i) => `${px(i).toFixed(1)},${py(s.valore_numerico).toFixed(1)}`);
+  const linePath = `M ${points.join(' L ')}`;
+  const areaPath = `${linePath} L ${px(serie.length - 1)} ${H - PAD_B} L ${px(0)} ${H - PAD_B} Z`;
+
+  const lastFlag = last.flag;
+  const lastColor = (lastFlag === 'fuori_range_alto' || lastFlag === 'fuori_range_basso') ? '#B91C1C'
+                 : lastFlag === 'borderline' ? '#B45309' : '#047857';
+  const lineColor = '#0C4A6E';
+
+  // Circles per ogni punto
+  const circles = serie.map((s, i) => {
+    const x = px(i), y = py(s.valore_numerico);
+    const isLast = i === serie.length - 1;
+    const f = s.flag;
+    const color = (f === 'fuori_range_alto' || f === 'fuori_range_basso') ? '#B91C1C'
+                : f === 'borderline' ? '#B45309' : '#047857';
+    return isLast
+      ? `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="7" fill="${lastColor}" opacity="0.18"/>
+         <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.5" fill="${lastColor}" stroke="white" stroke-width="1.8"/>`
+      : `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.5" fill="white" stroke="${color}" stroke-width="2"/>`;
+  }).join('');
+
+  // Labels numerici sopra i punti
+  const valueLabels = serie.map((s, i) => {
+    const x = px(i), y = py(s.valore_numerico);
+    const isLast = i === serie.length - 1;
+    const f = s.flag;
+    const color = (f === 'fuori_range_alto' || f === 'fuori_range_basso') ? '#B91C1C'
+                : f === 'borderline' ? '#B45309' : '#64748B';
+    return `<text x="${x.toFixed(1)}" y="${(y - 10).toFixed(1)}" text-anchor="middle" font-size="${isLast ? 10 : 9}" font-weight="${isLast ? 700 : 500}" fill="${color}">${s.valore_numerico}</text>`;
+  }).join('');
+
+  // Y labels
+  const yTicks = 4;
+  const yLabels = [];
+  for (let i = 0; i <= yTicks; i++) {
+    const val = max - (i / yTicks) * range;
+    yLabels.push(`<span>${val.toFixed(val < 10 ? 2 : 1)}</span>`);
+  }
+
+  // X labels
+  const xLabels = serie.map((s, i) => {
+    const d = new Date(s._data);
+    const label = `${d.getDate()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getFullYear()).slice(2)}`;
+    const isLast = i === serie.length - 1;
+    return `<span class="x-label ${isLast ? 'current' : ''}">${label}</span>`;
+  }).join('');
+
+  return `
+    <div class="chart-card">
+      <div class="chart-wrap">
+        <div class="y-labels">${yLabels.join('')}</div>
+        <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%; height:100%; display:block;" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="areagrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="${lineColor}" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="${lineColor}" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          ${rangeLines}
+          <path d="${areaPath}" fill="url(#areagrad)"/>
+          <path d="${linePath}" fill="none" stroke="${lineColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          ${circles}
+          ${valueLabels}
+        </svg>
+      </div>
+      <div class="x-labels">${xLabels}</div>
+    </div>
+  `;
+}
+
+function normalizeParamName(s) { return String(s || '').toLowerCase().trim().replace(/\s+/g, ' '); }
+function escapeHtml(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+</script>
+
+</body>
+</html>

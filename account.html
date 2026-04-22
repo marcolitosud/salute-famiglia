@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#F5FAFD">
+<title>Account · Salute Famiglia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:#FFFFFF; --bg:#F5FAFD; --line:#CDE4F1; --line-soft:#E8F1F7;
+    --ink:#0F172A; --ink-2:#334155; --muted:#64748B;
+    --primary:#0C4A6E; --primary-2:#075985; --accent:#0284C7; --accent-2:#0EA5E9;
+    --soft:#E0F2FE; --soft-2:#BAE6FD;
+    --rose:#B91C1C; --rose-bg:#FEE2E2;
+    --ok:#047857; --ok-bg:#D1FAE5;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: var(--bg); color: var(--ink); min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content:''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background-image: radial-gradient(rgba(12,74,110,0.03) 1px, transparent 1px);
+    background-size: 3px 3px;
+  }
+  .serif { font-family: 'Fraunces', serif; }
+
+  .topbar {
+    background: var(--paper); border-bottom: 1px solid var(--line);
+    padding: 12px 16px; display: flex; align-items: center; gap: 12px;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    border: 1px solid var(--line); background: var(--paper); color: var(--ink-2);
+    padding: 8px 12px; border-radius: 8px; text-decoration: none;
+    font-size: 13px; font-weight: 500;
+  }
+  .back-btn:hover { background: var(--line-soft); }
+  .topbar-title { font-size: 14px; font-weight: 600; color: var(--ink); flex: 1; text-align: center; padding-right: 80px; }
+
+  main { flex: 1; padding: 24px 20px 40px; max-width: 560px; width: 100%; margin: 0 auto; }
+
+  .hero { margin-bottom: 22px; }
+  .hero-label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  .hero-title { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; color: var(--primary); margin: 0 0 6px; letter-spacing: -0.02em; line-height: 1.1; }
+  .hero-sub { font-size: 13.5px; color: var(--muted); margin: 0; line-height: 1.5; }
+
+  .info-card {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 14px;
+    padding: 18px; margin-bottom: 14px;
+    box-shadow: 0 1px 2px rgba(12,74,110,0.04);
+  }
+  .row-field { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line-soft); }
+  .row-field:last-child { border-bottom: none; padding-bottom: 0; }
+  .row-field:first-child { padding-top: 0; }
+  .row-label { font-size: 11.5px; font-weight: 600; color: var(--muted); letter-spacing: 0.02em; text-transform: uppercase; }
+  .row-value { font-size: 14px; color: var(--ink); font-weight: 500; text-align: right; word-break: break-all; }
+
+  .section-h {
+    font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; color: var(--primary);
+    margin: 24px 0 12px; letter-spacing: -0.01em;
+  }
+
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--ink-2); margin: 14px 0 6px; }
+  input[type=password] {
+    width: 100%; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 10px;
+    font-size: 15px; font-family: inherit; background: var(--paper); color: var(--ink);
+  }
+  input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(2,132,199,0.12); }
+  .hint { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+  button.primary {
+    width: 100%; padding: 13px; border: none; border-radius: 10px;
+    background: var(--primary); color: white; font-size: 14px; font-weight: 600;
+    font-family: inherit; cursor: pointer; margin-top: 18px;
+    display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px;
+  }
+  button.primary:hover { background: var(--primary-2); }
+  button.primary:disabled { opacity: 0.6; cursor: not-allowed; }
+  button.danger {
+    width: 100%; padding: 12px; border: 1px solid var(--rose-bg); border-radius: 10px;
+    background: var(--paper); color: var(--rose); font-size: 13.5px; font-weight: 600;
+    font-family: inherit; cursor: pointer;
+  }
+  button.danger:hover { background: var(--rose-bg); }
+
+  .err { background: var(--rose-bg); color: var(--rose); padding: 10px 14px; border-radius: 8px; font-size: 12.5px; margin-top: 12px; font-weight: 500; display: none; }
+  .err.show { display: block; }
+  .ok { background: var(--ok-bg); color: var(--ok); padding: 10px 14px; border-radius: 8px; font-size: 12.5px; margin-top: 12px; font-weight: 500; display: none; }
+  .ok.show { display: block; }
+  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+    Indietro
+  </a>
+  <div class="topbar-title">Account</div>
+</div>
+
+<main>
+  <div class="hero">
+    <div class="hero-label">Il tuo account</div>
+    <h1 class="hero-title">Impostazioni</h1>
+    <p class="hero-sub">Gestisci la tua password e controlla i dati del tuo account.</p>
+  </div>
+
+  <!-- Info account -->
+  <div class="info-card">
+    <div class="row-field">
+      <div class="row-label">Email</div>
+      <div class="row-value" id="info-email">—</div>
+    </div>
+    <div class="row-field">
+      <div class="row-label">Membro dal</div>
+      <div class="row-value" id="info-created">—</div>
+    </div>
+    <div class="row-field">
+      <div class="row-label">Ultimo accesso</div>
+      <div class="row-value" id="info-last">—</div>
+    </div>
+  </div>
+
+  <!-- Cambio password -->
+  <h2 class="section-h">Cambia password</h2>
+  <div class="info-card">
+    <label for="pw-new">Nuova password</label>
+    <input type="password" id="pw-new" autocomplete="new-password" minlength="8">
+    <div class="hint">Almeno 8 caratteri</div>
+
+    <label for="pw-confirm">Conferma nuova password</label>
+    <input type="password" id="pw-confirm" autocomplete="new-password" minlength="8">
+
+    <button class="primary" id="btn-save-pw">Aggiorna password</button>
+    <div class="err" id="err-pw"></div>
+    <div class="ok" id="ok-pw"></div>
+  </div>
+
+  <!-- Logout -->
+  <h2 class="section-h">Sessione</h2>
+  <div class="info-card">
+    <button class="danger" id="btn-logout">Esci dall'account</button>
+  </div>
+</main>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://qhdwmydcldfwlfddyqri.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_7gP7-jBlrN9yaxtgqOXVpQ_DRzNco8Y';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+init();
+
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { location.href = 'index.html'; return; }
+
+  const u = session.user;
+  document.getElementById('info-email').textContent = u.email;
+  document.getElementById('info-created').textContent = formatData(u.created_at);
+  document.getElementById('info-last').textContent = formatData(u.last_sign_in_at);
+}
+
+function formatData(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('it-IT', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+
+document.getElementById('btn-save-pw').addEventListener('click', async () => {
+  const errEl = document.getElementById('err-pw');
+  const okEl = document.getElementById('ok-pw');
+  errEl.classList.remove('show'); okEl.classList.remove('show');
+
+  const pw1 = document.getElementById('pw-new').value;
+  const pw2 = document.getElementById('pw-confirm').value;
+  if (pw1.length < 8) { showErr('La password deve avere almeno 8 caratteri.'); return; }
+  if (pw1 !== pw2) { showErr('Le due password non coincidono.'); return; }
+
+  const btn = document.getElementById('btn-save-pw');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>';
+
+  const { error } = await supabase.auth.updateUser({ password: pw1 });
+  btn.disabled = false;
+  btn.textContent = 'Aggiorna password';
+
+  if (error) { showErr('Errore: ' + error.message); return; }
+
+  document.getElementById('pw-new').value = '';
+  document.getElementById('pw-confirm').value = '';
+  okEl.textContent = '✓ Password aggiornata con successo.';
+  okEl.classList.add('show');
+
+  function showErr(msg) { errEl.textContent = msg; errEl.classList.add('show'); }
+});
+
+document.getElementById('btn-logout').addEventListener('click', async () => {
+  if (!confirm('Vuoi uscire dall\'account?')) return;
+  await supabase.auth.signOut();
+  location.href = 'index.html';
+});
+</script>
+</body>
+</html>
