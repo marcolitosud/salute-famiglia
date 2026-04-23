@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#F5FAFD">
+<title>Salute Famiglia</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FFFFFF;
+    --bg: #F5FAFD;
+    --surface-2: #E6F3FA;
+    --line: #CDE4F1;
+    --line-soft: #E8F1F7;
+    --ink: #0F172A;
+    --ink-2: #334155;
+    --muted: #64748B;
+    --primary: #0C4A6E;
+    --primary-2: #075985;
+    --accent: #0284C7;
+    --accent-2: #0EA5E9;
+    --soft: #E0F2FE;
+    --soft-2: #BAE6FD;
+    --amber: #B45309;
+    --amber-bg: #FEF3C7;
+    --rose: #B91C1C;
+    --rose-bg: #FEE2E2;
+    --ok: #047857;
+    --ok-bg: #D1FAE5;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--bg); color: var(--ink); min-height: 100vh;
+    -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
+  }
+  .serif { font-family: 'Fraunces', serif; font-optical-sizing: auto; }
+  .serif-num { font-family: 'Fraunces', serif; font-feature-settings: 'ss01'; font-weight: 500; }
+
+  body::before {
+    content:''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background-image: radial-gradient(rgba(12,74,110,0.03) 1px, transparent 1px);
+    background-size: 3px 3px;
+  }
+
+  /* ========== LOGIN ========== */
+  #login-view {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 24px 20px;
+  }
+  .login-card {
+    width: 100%; max-width: 420px; background: var(--paper);
+    border: 1px solid var(--line); border-radius: 20px;
+    padding: 32px 26px; box-shadow: 0 4px 24px -10px rgba(12,74,110,0.15);
+  }
+  .brand-row { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+  .brand-mark {
+    width: 46px; height: 46px; flex-shrink: 0;
+    filter: drop-shadow(0 6px 14px rgba(12,74,110,0.3));
+  }
+  .brand-mark svg { width: 100%; height: 100%; display: block; }
+  .brand-name { font-size: 14px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+  .brand-tag { font-size: 11px; color: var(--muted); margin-top: 1px; letter-spacing: 0.02em; }
+
+  .login-title { font-family: 'Fraunces', serif; font-size: 30px; font-weight: 600; color: var(--primary); line-height: 1.1; margin: 0 0 6px; letter-spacing: -0.02em; }
+  .login-sub { color: var(--muted); font-size: 13.5px; margin: 0 0 26px; line-height: 1.55; }
+
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--ink-2); margin: 14px 0 6px; letter-spacing: 0.01em; }
+  input[type=email], input[type=password], input[type=text] {
+    width: 100%; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 10px;
+    font-size: 15px; font-family: inherit; background: var(--paper); color: var(--ink);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(2,132,199,0.12); }
+
+  .forgot-link {
+    display: inline-block; font-size: 12px; color: var(--accent); text-decoration: none;
+    font-weight: 600; margin-top: 8px;
+  }
+  .forgot-link:hover { color: var(--primary); text-decoration: underline; }
+
+  button.primary {
+    width: 100%; padding: 13px; border: none; border-radius: 10px;
+    background: var(--primary); color: white; font-size: 14.5px; font-weight: 600;
+    font-family: inherit; cursor: pointer; margin-top: 18px; transition: background 0.15s;
+    display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px;
+  }
+  button.primary:hover { background: var(--primary-2); }
+  button.primary:disabled { opacity: 0.7; cursor: not-allowed; }
+  button.ghost {
+    width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 10px;
+    background: var(--paper); color: var(--ink-2); font-size: 13.5px; font-weight: 600;
+    font-family: inherit; cursor: pointer; margin-top: 10px;
+  }
+  button.ghost:hover { background: var(--line-soft); }
+
+  .error-box {
+    background: var(--rose-bg); color: var(--rose); padding: 10px 14px; border-radius: 8px;
+    font-size: 12.5px; margin-top: 14px; font-weight: 500; display: none;
+  }
+  .error-box.show { display: block; }
+  .success-box {
+    background: var(--ok-bg); color: var(--ok); padding: 10px 14px; border-radius: 8px;
+    font-size: 12.5px; margin-top: 14px; font-weight: 500; display: none;
+  }
+  .success-box.show { display: block; }
+
+  /* ========== APP VIEW ========== */
+  #app-view { display: none; flex-direction: column; min-height: 100vh; }
+  .topbar {
+    background: var(--paper); border-bottom: 1px solid var(--line);
+    padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .user-chip { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+  .user-avatar-sm {
+    width: 34px; height: 34px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent-2), var(--primary));
+    color: white; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px; flex-shrink: 0;
+  }
+  .user-chip-text { min-width: 0; }
+  .hello { font-size: 10.5px; color: var(--muted); letter-spacing: 0.02em; }
+  .user-name-top { font-size: 13px; font-weight: 600; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .top-action {
+    width: 36px; height: 36px; border-radius: 10px; background: var(--line-soft);
+    border: none; display: flex; align-items: center; justify-content: center;
+    color: var(--ink-2); cursor: pointer; text-decoration: none;
+  }
+  .top-action:hover { background: var(--soft); color: var(--primary); }
+
+  main { flex: 1; padding: 24px 20px 40px; max-width: 680px; width: 100%; margin: 0 auto; }
+  .hero-label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  .hero-title { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 600; color: var(--primary); margin: 0 0 8px; letter-spacing: -0.02em; line-height: 1.1; }
+  .hero-sub { font-size: 14px; color: var(--muted); margin: 0 0 24px; line-height: 1.5; }
+
+  .familiare-card {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--paper); border: 1px solid var(--line); border-radius: 16px;
+    padding: 14px; text-decoration: none; color: inherit;
+    transition: transform 0.12s, border-color 0.15s, box-shadow 0.15s;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 2px rgba(12,74,110,0.04);
+  }
+  .familiare-card:hover { border-color: var(--soft-2); box-shadow: 0 4px 14px -4px rgba(12,74,110,0.12); transform: translateY(-1px); }
+  .familiare-card:active { transform: scale(0.99); }
+  .familiare-avatar {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--soft-2), var(--accent));
+    color: white; display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-weight: 600; font-size: 20px; flex-shrink: 0;
+  }
+  .familiare-avatar.minore {
+    background: linear-gradient(135deg, #FDE68A, var(--amber));
+  }
+  .familiare-info { flex: 1; min-width: 0; }
+  .familiare-name { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; color: var(--ink); line-height: 1.2; letter-spacing: -0.01em; }
+  .familiare-meta { font-size: 12px; color: var(--muted); margin-top: 3px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .pill { display: inline-flex; align-items: center; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 999px; letter-spacing: 0.02em; }
+  .pill-warn { background: var(--amber-bg); color: var(--amber); }
+  .chev { color: var(--muted); flex-shrink: 0; }
+
+  .empty { text-align: center; color: var(--muted); font-size: 13px; padding: 32px 20px; background: var(--paper); border-radius: 14px; border: 1px dashed var(--line); }
+  .loading-wrap { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 40px; color: var(--muted); font-size: 13px; }
+  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--line); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ========== MODAL ========== */
+  .modal-backdrop {
+    display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.55);
+    z-index: 100; align-items: flex-end; justify-content: center;
+  }
+  .modal-backdrop.show { display: flex; }
+  .modal {
+    background: var(--paper); width: 100%; max-width: 460px;
+    border-radius: 22px 22px 0 0; padding: 24px 22px 26px;
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-handle { width: 36px; height: 4px; background: var(--line); border-radius: 2px; margin: 0 auto 16px; }
+  .modal-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; color: var(--primary); margin: 0 0 6px; letter-spacing: -0.01em; }
+  .modal-sub { font-size: 13px; color: var(--muted); margin: 0 0 18px; line-height: 1.55; }
+</style>
+</head>
+<body>
+
+<!-- ============== LOGIN VIEW ============== -->
+<div id="login-view">
+  <div class="login-card">
+    <div class="brand-row">
+      <div class="brand-mark">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bm-g-login" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#0EA5E9"/>
+              <stop offset="100%" stop-color="#0C4A6E"/>
+            </linearGradient>
+          </defs>
+          <path d="M50 10 L14 42 L14 84 C14 88 17 91 21 91 L79 91 C83 91 86 88 86 84 L86 42 Z" fill="url(#bm-g-login)"/>
+          <path d="M50 54 C46 48, 36 48, 36 56 C36 64, 50 74, 50 74 C50 74, 64 64, 64 56 C64 48, 54 48, 50 54 Z" fill="white"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">Salute Famiglia</div>
+        <div class="brand-tag">Diario sanitario condiviso</div>
+      </div>
+    </div>
+    <h1 class="login-title">Accedi al tuo diario</h1>
+    <p class="login-sub">Entra con la tua email per vedere le tue cartelle e caricare nuovi referti.</p>
+    <form id="login-form" autocomplete="on">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" autocomplete="email" required placeholder="nome@esempio.it">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" autocomplete="current-password" required>
+      <a href="#" class="forgot-link" id="forgot-link">Password dimenticata?</a>
+      <button type="submit" class="primary" id="login-btn">Entra</button>
+      <div class="error-box" id="error-box"></div>
+    </form>
+  </div>
+</div>
+
+<!-- ============== APP VIEW ============== -->
+<div id="app-view">
+  <div class="topbar">
+    <div class="user-chip">
+      <div class="user-avatar-sm" id="user-avatar">?</div>
+      <div class="user-chip-text">
+        <div class="hello">Ciao</div>
+        <div class="user-name-top" id="user-email">—</div>
+      </div>
+    </div>
+    <a href="account.html" class="top-action" aria-label="Account">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </a>
+  </div>
+  <main>
+    <div class="hero-label">Archivio familiare</div>
+    <h2 class="hero-title">Le tue cartelle</h2>
+    <p class="hero-sub">Le persone a cui hai accesso. Tocca una card per aprire il profilo.</p>
+    <div id="familiari-list">
+      <div class="loading-wrap"><span class="spinner"></span> Caricamento...</div>
+    </div>
+  </main>
+</div>
+
+<!-- ============== MODAL RESET PASSWORD ============== -->
+<div class="modal-backdrop" id="reset-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3 class="modal-title">Recupero password</h3>
+    <p class="modal-sub">Inserisci la tua email: ti invieremo un link per impostare una nuova password.</p>
+    <label for="reset-email">Email</label>
+    <input type="email" id="reset-email" placeholder="nome@esempio.it">
+    <button class="primary" id="reset-send-btn">Invia link di recupero</button>
+    <button class="ghost" id="reset-cancel-btn">Annulla</button>
+    <div class="error-box" id="reset-error"></div>
+    <div class="success-box" id="reset-success"></div>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://qhdwmydcldfwlfddyqri.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_7gP7-jBlrN9yaxtgqOXVpQ_DRzNco8Y';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const loginView = document.getElementById('login-view');
+const appView = document.getElementById('app-view');
+const loginForm = document.getElementById('login-form');
+const loginBtn = document.getElementById('login-btn');
+const errorBox = document.getElementById('error-box');
+
+async function checkSession() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) await showApp(session);
+  else showLogin();
+}
+
+supabase.auth.onAuthStateChange((event) => {
+  if (event === 'SIGNED_OUT') showLogin();
+});
+
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  errorBox.classList.remove('show');
+  loginBtn.disabled = true;
+  loginBtn.innerHTML = '<span class="spinner" style="border-top-color:white;"></span>';
+  const email = document.getElementById('email').value.trim().toLowerCase();
+  const password = document.getElementById('password').value;
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  loginBtn.disabled = false;
+  loginBtn.textContent = 'Entra';
+  if (error) {
+    errorBox.textContent = traduciErrore(error.message);
+    errorBox.classList.add('show');
+    return;
+  }
+  await showApp(data.session);
+});
+
+function traduciErrore(msg) {
+  if (!msg) return 'Errore sconosciuto.';
+  if (msg.includes('Invalid login credentials')) return 'Email o password errate.';
+  if (msg.includes('Email not confirmed')) return 'Email non confermata.';
+  return msg;
+}
+
+// ----------- Reset password flow -----------
+const resetModal = document.getElementById('reset-modal');
+document.getElementById('forgot-link').addEventListener('click', (e) => {
+  e.preventDefault();
+  document.getElementById('reset-email').value = document.getElementById('email').value.trim();
+  document.getElementById('reset-error').classList.remove('show');
+  document.getElementById('reset-success').classList.remove('show');
+  resetModal.classList.add('show');
+});
+document.getElementById('reset-cancel-btn').addEventListener('click', () => resetModal.classList.remove('show'));
+document.getElementById('reset-send-btn').addEventListener('click', async () => {
+  const email = document.getElementById('reset-email').value.trim().toLowerCase();
+  const errEl = document.getElementById('reset-error');
+  const okEl = document.getElementById('reset-success');
+  errEl.classList.remove('show'); okEl.classList.remove('show');
+  if (!email || !email.includes('@')) {
+    errEl.textContent = 'Inserisci un email valida.';
+    errEl.classList.add('show'); return;
+  }
+  const btn = document.getElementById('reset-send-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner" style="border-top-color:white;"></span>';
+  const redirectTo = `${location.origin}/reset-password.html`;
+  const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
+  btn.disabled = false;
+  btn.textContent = 'Invia link di recupero';
+  if (error) {
+    errEl.textContent = 'Errore: ' + error.message;
+    errEl.classList.add('show'); return;
+  }
+  okEl.textContent = 'Se l\'email esiste nel sistema, riceverai un link tra pochi secondi. Controlla anche lo spam.';
+  okEl.classList.add('show');
+});
+
+function showLogin() {
+  loginView.style.display = 'flex';
+  appView.style.display = 'none';
+}
+
+async function showApp(session) {
+  loginView.style.display = 'none';
+  appView.style.display = 'flex';
+  const email = session.user.email;
+  document.getElementById('user-email').textContent = email;
+  document.getElementById('user-avatar').textContent = email.charAt(0).toUpperCase();
+  await caricaFamiliari();
+}
+
+async function caricaFamiliari() {
+  const listEl = document.getElementById('familiari-list');
+  const { data, error } = await supabase
+    .from('familiari')
+    .select('id, nome, cognome, data_nascita, sesso, ruolo_famiglia, is_minore')
+    .order('is_minore', { ascending: true })
+    .order('created_at', { ascending: true });
+
+  if (error) { listEl.innerHTML = `<div class="empty">Errore: ${error.message}</div>`; return; }
+  if (!data || data.length === 0) { listEl.innerHTML = `<div class="empty">Nessun familiare visibile.</div>`; return; }
+
+  listEl.innerHTML = data.map(f => {
+    const initials = (f.nome[0] + (f.cognome[0] || '')).toUpperCase();
+    const eta = etaDaData(f.data_nascita);
+    const metaParts = [];
+    if (eta !== null) metaParts.push(`${eta} anni`);
+    if (f.ruolo_famiglia) metaParts.push(f.ruolo_famiglia);
+    return `
+      <a href="familiare.html?id=${f.id}" class="familiare-card ${f.is_minore ? 'minore' : ''}">
+        <div class="familiare-avatar ${f.is_minore ? 'minore' : ''}">${initials}</div>
+        <div class="familiare-info">
+          <div class="familiare-name">${f.nome} ${f.cognome}</div>
+          <div class="familiare-meta">
+            ${f.is_minore ? '<span class="pill pill-warn">Minore</span>' : ''}
+            <span>${metaParts.join(' · ') || '—'}</span>
+          </div>
+        </div>
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+    `;
+  }).join('');
+}
+
+function etaDaData(dataIso) {
+  if (!dataIso) return null;
+  const oggi = new Date();
+  const nascita = new Date(dataIso);
+  let eta = oggi.getFullYear() - nascita.getFullYear();
+  const m = oggi.getMonth() - nascita.getMonth();
+  if (m < 0 || (m === 0 && oggi.getDate() < nascita.getDate())) eta--;
+  return eta;
+}
+
+checkSession();
+</script>
+</body>
+</html>
