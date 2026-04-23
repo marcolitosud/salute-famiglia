@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#F5FAFD">
+<title>Anagrafica · Salute Famiglia</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:#FFFFFF; --bg:#F5FAFD; --surface-2:#E6F3FA;
+    --line:#CDE4F1; --line-soft:#E8F1F7;
+    --ink:#0F172A; --ink-2:#334155; --muted:#64748B;
+    --primary:#0C4A6E; --primary-2:#075985; --accent:#0284C7; --accent-2:#0EA5E9;
+    --soft:#E0F2FE; --soft-2:#BAE6FD;
+    --amber:#B45309; --amber-bg:#FEF3C7;
+    --rose:#B91C1C; --rose-bg:#FEE2E2;
+    --ok:#047857; --ok-bg:#D1FAE5;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; font-family:'Plus Jakarta Sans', system-ui, sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent; }
+  body::before { content:''; position:fixed; inset:0; z-index:-1; pointer-events:none; background-image:radial-gradient(rgba(12,74,110,0.03) 1px, transparent 1px); background-size:3px 3px; }
+  .serif { font-family:'Fraunces', serif; }
+  .serif-num { font-family:'Fraunces', serif; font-feature-settings:'ss01'; font-weight:500; }
+
+  .topbar { background:var(--paper); border-bottom:1px solid var(--line); padding:12px 16px; display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:10; }
+  .icon-btn { width:34px; height:34px; border-radius:10px; background:var(--line-soft); border:none; display:flex; align-items:center; justify-content:center; color:var(--ink-2); cursor:pointer; text-decoration:none; flex-shrink:0; }
+  .icon-btn:hover { background:var(--soft); color:var(--primary); }
+  .topbar-tag { font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); flex:1; text-align:center; }
+
+  main { flex:1; padding:20px 20px 120px; max-width:720px; width:100%; margin:0 auto; }
+
+  .hero { margin-bottom:22px; }
+  .hero-kicker { font-size:10.5px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+  .hero-title { font-family:'Fraunces', serif; font-size:28px; font-weight:600; color:var(--primary); margin:0 0 6px; letter-spacing:-0.02em; line-height:1.1; }
+  .hero-sub { font-size:13px; color:var(--muted); margin:0; line-height:1.5; }
+
+  .section-h {
+    font-family:'Fraunces', serif; font-size:16px; font-weight:600; color:var(--primary);
+    margin: 26px 0 10px; letter-spacing:-0.01em;
+  }
+
+  .card {
+    background:var(--paper); border:1px solid var(--line); border-radius:14px;
+    padding: 4px 18px; margin-bottom: 12px;
+    box-shadow: 0 1px 2px rgba(12,74,110,0.04);
+  }
+
+  .field {
+    padding: 12px 0; border-bottom: 1px solid var(--line-soft);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .field:last-child { border-bottom: none; }
+
+  .field-row { display: flex; gap: 10px; align-items: flex-end; }
+  .field-row .field { flex: 1; border-bottom: 1px solid var(--line-soft); padding: 12px 0; }
+
+  label { font-size:11.5px; font-weight:600; color:var(--muted); letter-spacing:0.02em; text-transform:uppercase; }
+  input[type=text], input[type=date], input[type=number], input[type=tel], select, textarea {
+    width:100%; padding:10px 12px; border:1.5px solid var(--line); border-radius:10px;
+    font-size:15px; font-family:inherit; background:var(--paper); color:var(--ink);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  textarea { resize: vertical; min-height: 60px; line-height: 1.5; }
+  input:focus, select:focus, textarea:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(2,132,199,0.12); }
+  .hint { font-size:11px; color:var(--muted); margin-top:2px; }
+
+  /* Radio pill group (sesso) */
+  .pill-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pill-opt {
+    flex: 1; min-width: 70px;
+    padding: 9px 10px; border: 1.5px solid var(--line); border-radius: 10px;
+    background: var(--paper); color: var(--ink-2);
+    font-size: 13px; font-weight: 500; font-family: inherit;
+    cursor: pointer; text-align: center;
+    transition: all 0.15s;
+  }
+  .pill-opt:hover { border-color: var(--soft-2); }
+  .pill-opt.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+  /* Gruppo sanguigno: due select affiancate */
+  .blood-row { display: flex; gap: 8px; }
+  .blood-row select { flex: 1; }
+
+  /* BMI hint */
+  .bmi-box {
+    margin-top: 10px; padding: 12px 14px; border-radius: 10px;
+    background: var(--soft); border: 1px solid var(--soft-2);
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .bmi-label { font-size: 11px; font-weight: 600; color: var(--primary); letter-spacing: 0.06em; text-transform: uppercase; }
+  .bmi-value { font-family:'Fraunces', serif; font-feature-settings:'ss01'; font-size: 22px; font-weight: 600; color: var(--primary); }
+  .bmi-status { font-size: 12px; color: var(--ink-2); margin-top: 2px; font-weight: 500; }
+  .bmi-box.warn { background: var(--amber-bg); border-color: #FDE68A; }
+  .bmi-box.warn .bmi-label, .bmi-box.warn .bmi-value { color: var(--amber); }
+  .bmi-box.alert { background: var(--rose-bg); border-color: #FECACA; }
+  .bmi-box.alert .bmi-label, .bmi-box.alert .bmi-value { color: var(--rose); }
+
+  /* Bottom actions */
+  .bottom-actions {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+    background: rgba(245,250,253,0.96); backdrop-filter: blur(10px);
+    border-top: 1px solid var(--line);
+    padding: 12px 16px calc(14px + env(safe-area-inset-bottom, 0));
+    display: flex; gap: 10px;
+    max-width: 720px; margin: 0 auto;
+  }
+  .action-btn {
+    flex: 1; padding: 13px; border-radius: 12px;
+    font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    min-height: 46px; border: none;
+  }
+  .action-btn.ghost { background: var(--paper); color: var(--ink); border: 1px solid var(--line); }
+  .action-btn.ghost:hover { background: var(--line-soft); }
+  .action-btn.primary { background: var(--primary); color: white; }
+  .action-btn.primary:hover { background: var(--primary-2); }
+  .action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .err { background: var(--rose-bg); color: var(--rose); padding: 10px 14px; border-radius: 8px; font-size: 12.5px; margin: 10px 0; font-weight: 500; }
+  .ok { background: var(--ok-bg); color: var(--ok); padding: 10px 14px; border-radius: 8px; font-size: 12.5px; margin: 10px 0; font-weight: 500; }
+  .loading-wrap { display:flex; align-items:center; justify-content:center; gap:10px; padding:40px; color:var(--muted); font-size:13px; }
+  .spinner { display:inline-block; width:16px; height:16px; border:2px solid var(--line); border-top-color:var(--primary); border-radius:50%; animation:spin 0.7s linear infinite; }
+  .spinner.on-primary { border-color: rgba(255,255,255,0.4); border-top-color: white; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  .meta-updated { font-size: 11px; color: var(--muted); text-align: center; margin: 10px 0 0; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="#" class="icon-btn" id="back-btn" aria-label="Indietro">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+  </a>
+  <div class="topbar-tag">Anagrafica</div>
+  <div style="width:34px;"></div>
+</div>
+
+<main>
+  <div id="content">
+    <div class="loading-wrap"><span class="spinner"></span> Caricamento...</div>
+  </div>
+</main>
+
+<div class="bottom-actions" id="bottom-actions" style="display:none;">
+  <button class="action-btn ghost" id="btn-cancel">Annulla</button>
+  <button class="action-btn primary" id="btn-save">Salva</button>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://qhdwmydcldfwlfddyqri.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_7gP7-jBlrN9yaxtgqOXVpQ_DRzNco8Y';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const MESI_IT = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+
+let familiareId = null;
+let currentFamiliare = null;
+
+init();
+
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { location.href = 'index.html'; return; }
+
+  const params = new URLSearchParams(location.search);
+  familiareId = params.get('familiare');
+  if (!familiareId) { document.getElementById('content').innerHTML = '<div class="err">ID familiare mancante.</div>'; return; }
+
+  document.getElementById('back-btn').addEventListener('click', (e) => { e.preventDefault(); location.href = `familiare.html?id=${familiareId}`; });
+  document.getElementById('btn-cancel').addEventListener('click', () => { location.href = `familiare.html?id=${familiareId}`; });
+  document.getElementById('btn-save').addEventListener('click', handleSave);
+
+  const { data: fam, error } = await supabase.from('familiari').select('*').eq('id', familiareId).single();
+  if (error || !fam) { document.getElementById('content').innerHTML = '<div class="err">Profilo non accessibile.</div>'; return; }
+  currentFamiliare = fam;
+
+  render();
+  document.getElementById('bottom-actions').style.display = 'flex';
+}
+
+function render() {
+  const f = currentFamiliare;
+  // Split gruppo_sanguigno in 'abo' (0/A/B/AB) e 'rh' (+/-) se non salvati separatamente
+  // (nella migration useremo due colonne: gruppo_sanguigno + fattore_rh)
+  const abo = f.gruppo_sanguigno || '';
+  const rh = f.fattore_rh || '';
+  const sesso = f.sesso || '';
+
+  document.getElementById('content').innerHTML = `
+    <div class="hero">
+      <div class="hero-kicker">Dati medici</div>
+      <h1 class="hero-title">${escapeHtml(f.nome)} ${escapeHtml(f.cognome)}</h1>
+      <p class="hero-sub">Le informazioni mediche base che vuoi avere sempre a portata di mano. Compila solo ciò che vuoi.</p>
+    </div>
+
+    <div class="section-h">Dati base</div>
+    <div class="card">
+      <div class="field-row">
+        <div class="field">
+          <label for="f-nome">Nome</label>
+          <input type="text" id="f-nome" value="${escapeHtml(f.nome || '')}">
+        </div>
+        <div class="field">
+          <label for="f-cognome">Cognome</label>
+          <input type="text" id="f-cognome" value="${escapeHtml(f.cognome || '')}">
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-data-nascita">Data di nascita</label>
+        <input type="date" id="f-data-nascita" value="${escapeHtml(f.data_nascita || '')}">
+      </div>
+      <div class="field">
+        <label>Sesso biologico</label>
+        <div class="pill-group" id="pg-sesso">
+          <button type="button" class="pill-opt ${sesso === 'F' ? 'active' : ''}" data-val="F">Donna</button>
+          <button type="button" class="pill-opt ${sesso === 'M' ? 'active' : ''}" data-val="M">Uomo</button>
+          <button type="button" class="pill-opt ${sesso === 'altro' ? 'active' : ''}" data-val="altro">Altro</button>
+        </div>
+        <div class="hint">Rilevante per alcuni valori di riferimento (es. emoglobina, ferritina)</div>
+      </div>
+      <div class="field">
+        <label for="f-ruolo">Ruolo in famiglia</label>
+        <input type="text" id="f-ruolo" value="${escapeHtml(f.ruolo_famiglia || '')}" placeholder="es. Madre, Padre, Figlio...">
+      </div>
+    </div>
+
+    <div class="section-h">Misure</div>
+    <div class="card">
+      <div class="field-row">
+        <div class="field">
+          <label for="f-altezza">Altezza (cm)</label>
+          <input type="number" id="f-altezza" min="30" max="250" step="1" value="${f.altezza_cm || ''}" placeholder="165">
+        </div>
+        <div class="field">
+          <label for="f-peso">Peso (kg)</label>
+          <input type="number" id="f-peso" min="1" max="300" step="0.1" value="${f.peso_kg || ''}" placeholder="58.5">
+        </div>
+      </div>
+      <div id="bmi-wrap"></div>
+    </div>
+
+    <div class="section-h">Gruppo sanguigno</div>
+    <div class="card">
+      <div class="field">
+        <label>Gruppo</label>
+        <div class="blood-row">
+          <select id="f-abo">
+            <option value="">—</option>
+            <option value="0" ${abo === '0' ? 'selected' : ''}>0 (zero)</option>
+            <option value="A" ${abo === 'A' ? 'selected' : ''}>A</option>
+            <option value="B" ${abo === 'B' ? 'selected' : ''}>B</option>
+            <option value="AB" ${abo === 'AB' ? 'selected' : ''}>AB</option>
+          </select>
+          <select id="f-rh">
+            <option value="">—</option>
+            <option value="+" ${rh === '+' ? 'selected' : ''}>Rh positivo (+)</option>
+            <option value="-" ${rh === '-' ? 'selected' : ''}>Rh negativo (−)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-h">Allergie e condizioni</div>
+    <div class="card">
+      <div class="field">
+        <label for="f-allergie">Allergie</label>
+        <textarea id="f-allergie" placeholder="es. penicillina, pollini, arachidi...">${escapeHtml(f.allergie || '')}</textarea>
+      </div>
+      <div class="field">
+        <label for="f-patologie">Patologie croniche</label>
+        <textarea id="f-patologie" placeholder="es. ipertensione, diabete tipo 2, asma...">${escapeHtml(f.patologie_croniche || '')}</textarea>
+      </div>
+      <div class="field">
+        <label for="f-farmaci">Farmaci in uso</label>
+        <textarea id="f-farmaci" placeholder="es. Cardioaspirina 100 mg/die, Norvasc 5 mg/die...">${escapeHtml(f.farmaci_in_uso || '')}</textarea>
+      </div>
+    </div>
+
+    <div class="section-h">Contatti</div>
+    <div class="card">
+      <div class="field">
+        <label for="f-medico">Medico curante</label>
+        <input type="text" id="f-medico" value="${escapeHtml(f.medico_curante || '')}" placeholder="Dr. Nome Cognome · telefono">
+      </div>
+      <div class="field">
+        <label for="f-emergenza">Contatto di emergenza</label>
+        <input type="text" id="f-emergenza" value="${escapeHtml(f.contatto_emergenza || '')}" placeholder="es. Marco (figlio) · 333 1234567">
+      </div>
+      <div class="field">
+        <label for="f-telefono">Telefono personale</label>
+        <input type="tel" id="f-telefono" value="${escapeHtml(f.telefono || '')}" placeholder="333 1234567">
+      </div>
+      <div class="field">
+        <label for="f-cf">Codice fiscale</label>
+        <input type="text" id="f-cf" value="${escapeHtml(f.codice_fiscale || '')}" placeholder="RSSMRA80A01H501U" style="text-transform: uppercase; letter-spacing: 0.02em;">
+        <div class="hint">Utile per ricette elettroniche e comunicazioni col medico</div>
+      </div>
+    </div>
+
+    <div class="section-h">Note libere</div>
+    <div class="card">
+      <div class="field">
+        <label for="f-note">Altre informazioni</label>
+        <textarea id="f-note" placeholder="es. pacemaker dal 2019, portatore di lenti a contatto, intolleranza al lattosio..." style="min-height: 80px;">${escapeHtml(f.note || '')}</textarea>
+      </div>
+    </div>
+
+    ${f.anagrafica_updated_at ? `<div class="meta-updated">Ultimo aggiornamento: ${formatDataLunga(f.anagrafica_updated_at)}</div>` : ''}
+    <div id="msg-area"></div>
+  `;
+
+  // Handler pill sesso
+  document.querySelectorAll('#pg-sesso .pill-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#pg-sesso .pill-opt').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Auto-calc BMI
+  const pesoEl = document.getElementById('f-peso');
+  const altezzaEl = document.getElementById('f-altezza');
+  const renderBmi = () => {
+    const peso = parseFloat(pesoEl.value);
+    const altezza = parseFloat(altezzaEl.value);
+    const wrap = document.getElementById('bmi-wrap');
+    if (!peso || !altezza || altezza < 50) { wrap.innerHTML = ''; return; }
+    const m = altezza / 100;
+    const bmi = peso / (m * m);
+    let status, cls;
+    if (f.is_minore || etaDa(f.data_nascita) < 18) {
+      status = 'Riferimento bambini: consultare il pediatra (percentili BMI)';
+      cls = '';
+    } else if (bmi < 18.5) { status = 'Sottopeso'; cls = 'warn'; }
+    else if (bmi < 25) { status = 'Normopeso'; cls = ''; }
+    else if (bmi < 30) { status = 'Sovrappeso'; cls = 'warn'; }
+    else if (bmi < 35) { status = 'Obesità di primo grado'; cls = 'alert'; }
+    else if (bmi < 40) { status = 'Obesità di secondo grado'; cls = 'alert'; }
+    else { status = 'Obesità di terzo grado'; cls = 'alert'; }
+    wrap.innerHTML = `
+      <div class="bmi-box ${cls}">
+        <div>
+          <div class="bmi-label">Indice di massa corporea</div>
+          <div class="bmi-status">${status}</div>
+        </div>
+        <div class="bmi-value">${bmi.toFixed(1)}</div>
+      </div>
+    `;
+  };
+  pesoEl.addEventListener('input', renderBmi);
+  altezzaEl.addEventListener('input', renderBmi);
+  renderBmi();
+}
+
+async function handleSave() {
+  const btn = document.getElementById('btn-save');
+  const msgArea = document.getElementById('msg-area');
+  msgArea.innerHTML = '';
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner on-primary"></span> Salvataggio...';
+
+  const sessoEl = document.querySelector('#pg-sesso .pill-opt.active');
+  const payload = {
+    nome: document.getElementById('f-nome').value.trim(),
+    cognome: document.getElementById('f-cognome').value.trim(),
+    data_nascita: document.getElementById('f-data-nascita').value || null,
+    sesso: sessoEl ? sessoEl.dataset.val : null,
+    ruolo_famiglia: nullify(document.getElementById('f-ruolo').value),
+    altezza_cm: toInt(document.getElementById('f-altezza').value),
+    peso_kg: toFloat(document.getElementById('f-peso').value),
+    gruppo_sanguigno: nullify(document.getElementById('f-abo').value),
+    fattore_rh: nullify(document.getElementById('f-rh').value),
+    allergie: nullify(document.getElementById('f-allergie').value),
+    patologie_croniche: nullify(document.getElementById('f-patologie').value),
+    farmaci_in_uso: nullify(document.getElementById('f-farmaci').value),
+    medico_curante: nullify(document.getElementById('f-medico').value),
+    contatto_emergenza: nullify(document.getElementById('f-emergenza').value),
+    telefono: nullify(document.getElementById('f-telefono').value),
+    codice_fiscale: nullify(document.getElementById('f-cf').value.toUpperCase()),
+    note: nullify(document.getElementById('f-note').value),
+    anagrafica_updated_at: new Date().toISOString(),
+  };
+
+  if (!payload.nome || !payload.cognome) {
+    msgArea.innerHTML = '<div class="err">Nome e cognome sono obbligatori.</div>';
+    btn.disabled = false; btn.textContent = 'Salva'; return;
+  }
+  if (payload.codice_fiscale && !/^[A-Z0-9]{16}$/.test(payload.codice_fiscale)) {
+    msgArea.innerHTML = '<div class="err">Il codice fiscale deve essere di 16 caratteri alfanumerici. Lascia vuoto se non vuoi inserirlo.</div>';
+    btn.disabled = false; btn.textContent = 'Salva'; return;
+  }
+
+  const { error } = await supabase.from('familiari').update(payload).eq('id', familiareId);
+  btn.disabled = false;
+  btn.textContent = 'Salva';
+  if (error) {
+    msgArea.innerHTML = `<div class="err">Errore: ${escapeHtml(error.message)}</div>`;
+    return;
+  }
+  msgArea.innerHTML = '<div class="ok">✓ Dati aggiornati. Torno al profilo...</div>';
+  setTimeout(() => { location.href = `familiare.html?id=${familiareId}`; }, 900);
+}
+
+function etaDa(iso) {
+  if (!iso) return 999;
+  const o = new Date(), n = new Date(iso);
+  let e = o.getFullYear() - n.getFullYear();
+  const m = o.getMonth() - n.getMonth();
+  if (m < 0 || (m === 0 && o.getDate() < n.getDate())) e--;
+  return e;
+}
+function formatDataLunga(iso) {
+  const d = new Date(iso);
+  return `${d.getDate()} ${MESI_IT[d.getMonth()]} ${d.getFullYear()}`;
+}
+function toInt(v) { const n = parseInt(v, 10); return isNaN(n) ? null : n; }
+function toFloat(v) { const n = parseFloat(v); return isNaN(n) ? null : n; }
+function nullify(s) { const t = (s || '').trim(); return t === '' ? null : t; }
+function escapeHtml(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+</script>
+</body>
+</html>
